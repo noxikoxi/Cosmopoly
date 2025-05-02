@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="Game.Card"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Game"
+             mc:Ignorable="d" 
+             d:DesignHeight="370" d:DesignWidth="300">
+    <Border
+        CornerRadius="20"
+        Background="AliceBlue"
+        BorderBrush="Black" 
+        BorderThickness="4" 
+        >
+        <StackPanel>
+            <Label x:Name="CardTitle" Content="Nazwa Karty" FontWeight="Bold" HorizontalAlignment="Center" FontSize="25"/>
+            <Line
+                X1="0" Y1="0" X2="300" Y2="0"
+                Stroke="Black" StrokeThickness="5"/>
+            <TextBlock x:Name="CardDescription"  TextWrapping="Wrap" Text="Lorem Ipsum Dolor Sit Amet" Height="230"/>
+            <Separator Height="10"></Separator>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border
+                    CornerRadius="20"
+                    Padding="5"
+                    Background="#FF26A3A3"
+                    BorderBrush="Black"
+                    BorderThickness="2">
+                    <Button x:Name="CardAccept" Content="Zatwierdź" Width="100" Height="40" Background="{x:Null}" BorderBrush="{x:Null}" FontWeight="Bold"></Button>
+                </Border>
+                
+                <Separator Width="50"></Separator>
+                <Border
+                    CornerRadius="20"
+                    Padding="5"
+                    Background="#FF26A3A3"
+                    BorderBrush="Black"
+                    BorderThickness="2">
+                    <Button x:Name="CardDecline" Content="Anuluj" Width="100" Height="40" Background="{x:Null}" BorderBrush="{x:Null}" FontWeight="Bold"></Button>
+                </Border>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

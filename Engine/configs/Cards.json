@@ -1,0 +1,40 @@
+{
+    "cards": [
+        {
+            "title": "Atak piratów",
+            "description": "Zostałeś zaatakowany przez piratów."
+
+        },
+        {
+            "title": "Obrona przed piratami",
+            "description": "Strażnicy galaktyki zgodzili sie obronić cię przed jednym atakiem piratów. Wezwij ich kiedy tylko chcesz."
+
+        },
+        {
+            "title": "Bilet galaktyczny",
+            "description": "Możesz przenieść się do dowolnej stacji kolei galaktycznych."
+
+        },
+        {
+            "title": "Podatek od nieruchomości",
+            "description": "Imperator zarządził pobranie jednorazowego podatku od nieruchomości."
+
+        },
+        {
+            "title": "Galaktyczna loteria",
+            "description": "Gratulację! Wygrałes w Galaktycznej Loterii."
+
+        },
+        {
+            "title": "Awaria silnika statku",
+            "description": "Twój statek uległ awarii i jest niezdolny do dalszego poruszania się.\nTracisz kolejkę i musisz zapłacić za holowanie do najbliższej planety."
+
+        },
+        {
+            "title": "Awaria w stoczni galaktycznej",
+            "description": "Twoja stocznia galaktyczna uległa awarii, dalsza produkcja jest niemożliwa.\nJeżeli nie zapłacisz za jej naprawę, stocznia zostanie usunięta."
+
+        }
+    ]
+
+}
