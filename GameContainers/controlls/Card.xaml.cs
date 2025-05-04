@@ -13,30 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Game
+namespace GameContainers.controlls
 {
     /// <summary>
-    /// Logika interakcji dla klasy PlayerInfo.xaml
+    /// Logika interakcji dla klasy Card.xaml
     /// </summary>
-    public partial class PlayerInfo : UserControl
+    public partial class Card : UserControl
     {
-        public PlayerInfo()
+        public Card()
         {
             InitializeComponent();
-        }
-
-        public void SetPlayer(string player_name)
-        {
-            PlayerName.Content = player_name;
-        }
-        public void SetCredits(long credits)
-        {
-            Credits.Content = credits.ToString();
-        }
-
-        public void SetCardsCount(int count)
-        {
-            PirateCards.Content = count;
         }
     }
 }

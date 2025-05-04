@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="GameContainers.controlls.EntityChooser"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GameContainers.controlls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Border
+        CornerRadius="10"
+        Background="{StaticResource ContainerBackground}"
+        BorderBrush="Black"
+        BorderThickness="3"
+        >
+        <StackPanel x:Name="ParentStackPanel">
+            <Label x:Name="Title" Content="Wybierz planetę lub układ planetarny, który chcesz ulepszyć" FontWeight="Bold" HorizontalAlignment="Center" FontSize="25" Foreground="{StaticResource TextColor}"/>
+            <Line
+        X1="0" Y1="0"  X2="{Binding ActualWidth, ElementName=ParentStackPanel}" Y2="0"
+        Stroke="Black" StrokeThickness="5"/>
+            <ItemsControl ItemsSource="{Binding Entities}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel  Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="5" Orientation="Vertical" HorizontalAlignment="Center">
+                            <Label Content="{Binding Name}" HorizontalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource TextColor}"/>
+                            <Button 
+                                Content="Planeta" 
+                                Width="80" 
+                                Height="80" 
+                                Background="Brown"
+                                Tag="40"
+                                Style="{StaticResource RoundedButton}"
+                                />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Border>
+</UserControl>

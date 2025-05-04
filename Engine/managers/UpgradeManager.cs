@@ -1,11 +1,11 @@
-﻿using CosmopolyEngine.models;
+﻿using Engine.models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CosmopolyEngine.managers
+namespace Engine.managers
 {
     static internal class UpgradeManager
     {

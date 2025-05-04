@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CosmopolyEngine.models
+namespace Engine.models
 {
     internal class Singularity : SpaceEntity
     {

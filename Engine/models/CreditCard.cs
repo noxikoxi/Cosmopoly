@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CosmopolyEngine.models
+namespace Engine.models
 {
     class CreditCard : Card 
     {
@@ -15,9 +15,9 @@ namespace CosmopolyEngine.models
             Amount = amount;
         }
 
-        public override void Apply(Player player, Game game)
+        public override void Apply(Game game)
         {
-            game.AddCredits(player, Amount);
+            game.AddCredits(game.GetCurrentPlayer(), Amount);
         }
     }
 }

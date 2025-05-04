@@ -1,38 +1,24 @@
-﻿namespace CosmopolyEngine.models
+﻿namespace Engine.models
 {
-    public class Player
+    public class Player(string name, long initialCredits = 0)
     {
-        private string _name;
+        public string Name { get; private set; } = name;
 
-        public long credits;
+        public long credits = initialCredits;
 
         public int BlockedTurns { get; set; }
 
-        public byte SkippedTurns { get; private set; }
+        public byte SkippedTurns { get; private set; } = 0;
 
         public int position;
 
-        public List<Card> cards;
+        public List<Card> cards = new List<Card>();
 
-        public bool IsBankrupt { get; set; }
-
-        public Player(string name, long initialCredits=0)
-        {
-            _name = name;
-            credits = initialCredits;
-            cards = new List<Card>();
-            IsBankrupt = false;
-            SkippedTurns = 0;
-        }
+        public bool IsBankrupt { get; set; } = false;
 
         public void SkipTurn()
         {
             SkippedTurns += 1;
-        }
-
-        public string GetName() 
-        { 
-            return _name;
         }
 
     }

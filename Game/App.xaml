@@ -4,6 +4,14 @@
              xmlns:local="clr-namespace:Game"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="ButtonBackground" Color="#CBBA8A"/>
+            <SolidColorBrush x:Key="ButtonBackgroundHover" Color="#D9CF98"/>
+            <SolidColorBrush x:Key="TextColor" Color="#F9F9F9"/>
+            <SolidColorBrush x:Key="ContainerBackground" Color="#64576B"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/GameContainers;component/styles/RoundedButton.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

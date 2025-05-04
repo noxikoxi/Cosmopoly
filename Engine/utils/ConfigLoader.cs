@@ -1,5 +1,5 @@
-﻿using CosmopolyEngine.managers;
-using CosmopolyEngine.models;
+﻿using Engine.managers;
+using Engine.models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace CosmopolyEngine.utils
+namespace Engine.utils
 {
     internal class CardsConfig
     {

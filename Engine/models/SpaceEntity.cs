@@ -5,30 +5,18 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace CosmopolyEngine.models
+namespace Engine.models
 {
     public abstract class SpaceEntity
     {
-        private string name;
+        public string Name { get;  private set; }
 
-        private bool isHabitable;
-
-
+        public bool IsHabitable { get; private set; }
 
         public SpaceEntity(string name, bool isHabitable)
         {
-            this.name = name;
-            this.isHabitable = isHabitable;
-        }
-
-        public bool IsHabitable()
-        {
-            return isHabitable;
-        }
-
-        public string GetName()
-        {
-            return name;
+            Name = name;
+            IsHabitable = isHabitable;
         }
 
         protected abstract string ToStringInternal();

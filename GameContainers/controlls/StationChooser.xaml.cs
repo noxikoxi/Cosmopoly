@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Game
+namespace GameContainers.controlls
 {
     /// <summary>
-    /// Logika interakcji dla klasy GameButtons.xaml
+    /// Logika interakcji dla klasy StationChooser.xaml
     /// </summary>
-    public partial class GameButtons : UserControl
+    public partial class StationChooser : UserControl
     {
-        public GameButtons()
+        public StationChooser()
         {
             InitializeComponent();
         }

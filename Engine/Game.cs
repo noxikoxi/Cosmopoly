@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Engine.managers;
+using Engine.models;
+using Engine.utils;
 
-namespace CosmopolyEngine
+namespace Engine
 {
     public class Game
     {
@@ -33,6 +36,8 @@ namespace CosmopolyEngine
             _players = players;
             Turn = 0;
             _currPlayer = 0;
+            upgradedPlanetsThisTurn = new();
+            upgradedSystemThisTurn = new();
 
             var cards = ConfigLoader.LoadCardConfig(Path.Combine(configFolderPath, "Cards.json"));
             Console.WriteLine("\n[Cosmopoly Engine] Loaded Cards");
@@ -132,11 +137,11 @@ namespace CosmopolyEngine
 
         public void NextPlayer()
         {
-            ++this._currPlayer;
-            if (this._currPlayer >= _players_count)
+            ++_currPlayer;
+            if (_currPlayer >= _players_count)
             {
-                this.Turn++;
-                this._currPlayer %= _players_count;
+                Turn++;
+                _currPlayer %= _players_count;
             }
             var player = GetCurrentPlayer();
 
@@ -152,7 +157,7 @@ namespace CosmopolyEngine
 
         public int RollDice()
         {
-            int diceRoll = this._random.Next(6) + 1; // from 1 to 6
+            int diceRoll = _random.Next(6) + 1; // from 1 to 6
             return diceRoll;
         }
 
@@ -161,7 +166,7 @@ namespace CosmopolyEngine
 
             if (newPosition >= 0 && newPosition < _total_entities)
             {
-                this._players[this._currPlayer].position = newPosition;
+                _players[_currPlayer].position = newPosition;
             }
             else
             {
@@ -171,24 +176,24 @@ namespace CosmopolyEngine
 
         public int MovePlayerByPoints(int points)
         {
-            int newPostion = (this._players[this._currPlayer].position + points) % _total_entities;
-            this._players[this._currPlayer].position = newPostion;
+            int newPostion = (_players[_currPlayer].position + points) % _total_entities;
+            _players[_currPlayer].position = newPostion;
 
             return newPostion;
         }
 
         public SpaceEntity GetCurrentPlayerPositionEntity()
         {
-            return this.Entities[GetCurrentPlayer().position];
+            return Entities[GetCurrentPlayer().position];
         }
 
         public Card GetCardFromSingularity()
         {
-            if (this.Entities[GetCurrentPlayer().position].GetType() != typeof(Singularity))
+            if (Entities[GetCurrentPlayer().position].GetType() != typeof(Singularity))
             {
                 throw new Exception("Current position is not Singularity");
             }
-            return ((Singularity)this.Entities[GetCurrentPlayer().position]).GetRandomCard(PlanetarySystems, _random);
+            return ((Singularity)Entities[GetCurrentPlayer().position]).GetRandomCard(PlanetarySystems, _random);
         }
 
         public void BlockPlayer(int turns)
@@ -198,16 +203,16 @@ namespace CosmopolyEngine
 
         public void SkipPlayerTurn()
         {
-            if (this._players[this._currPlayer].SkippedTurns < 2)
+            if (_players[_currPlayer].SkippedTurns < 2)
             {
-                this._players[this._currPlayer].SkipTurn();
+                _players[_currPlayer].SkipTurn();
                 NextPlayer();
             }
         }
 
         public Player GetCurrentPlayer()
         {
-            return this._players[this._currPlayer];
+            return _players[_currPlayer];
         }
            
         // Upgrades
@@ -342,13 +347,13 @@ namespace CosmopolyEngine
         // CARDS
         public List<Card> GetCurrentPlayerCards()
         {
-            return this._players[_currPlayer].cards;
+            return _players[_currPlayer].cards;
         }
 
         public void UsePlayerCard(int cardId)
         {
             // TODO:
-            this._players[_currPlayer].cards.RemoveAt(cardId);
+            _players[_currPlayer].cards.RemoveAt(cardId);
         }
     }
 }

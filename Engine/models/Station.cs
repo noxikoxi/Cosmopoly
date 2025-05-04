@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CosmopolyEngine.models
+namespace Engine.models
 {
-    class Station : SpaceEntity
+    public class Station : SpaceEntity
     {
         public Station(string name) : base(name, false)
         {

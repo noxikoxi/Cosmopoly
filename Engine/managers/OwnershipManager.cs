@@ -1,11 +1,11 @@
-﻿using CosmopolyEngine.models;
+﻿using Engine.models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CosmopolyEngine.managers
+namespace Engine.managers
 {
     static class OwnershipManager
     {
@@ -16,7 +16,7 @@ namespace CosmopolyEngine.managers
 
             foreach (int planetId in system.GetPlanetsIds())
             {
-                if (entities[planetId].IsHabitable() && ((HabitablePlanet)entities[planetId]).Owner != player)
+                if (entities[planetId].IsHabitable && ((HabitablePlanet)entities[planetId]).Owner != player)
                 {
                     isOwner = false;
                     break;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CosmopolyEngine.models
+namespace Engine.models
 {
     class MoveCard(string title, string description) : Card(title, description)
     {

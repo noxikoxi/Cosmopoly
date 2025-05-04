@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Engine.models;
 
-namespace CosmopolyEngine
+namespace Engine.managers
 {
     internal class FinanceManager
     {
@@ -55,17 +56,17 @@ namespace CosmopolyEngine
 
         public FinanceManager()
         {
-            this.passiveBase = 0;
-            this.passiveByGalacticShipyard = 0;
-            this.passiveByMineLevel = [0];
-            this.passiveByFarmLevel = [0];
-            this.passiveByAsteroidMineLevel = [0];
-            this.costbyHotelLevel = [0];
-            this.costUpgradeHotel = [0];
-            this.costUpgradeMine = [0];
-            this.costUpgradeFarm = [0];
-            this.costUpgradeAsteroidMine = [0];
-            this.costBuildShipyard = 0;
+            passiveBase = 0;
+            passiveByGalacticShipyard = 0;
+            passiveByMineLevel = [0];
+            passiveByFarmLevel = [0];
+            passiveByAsteroidMineLevel = [0];
+            costbyHotelLevel = [0];
+            costUpgradeHotel = [0];
+            costUpgradeMine = [0];
+            costUpgradeFarm = [0];
+            costUpgradeAsteroidMine = [0];
+            costBuildShipyard = 0;
         }
 
         public override string ToString()
@@ -150,7 +151,7 @@ namespace CosmopolyEngine
             long passiveIncome = passiveBase;
             foreach (SpaceEntity entity in entities)
             {
-                if (entity.IsHabitable() && ((HabitablePlanet)entity).Owner == player) {
+                if (entity.IsHabitable && ((HabitablePlanet)entity).Owner == player) {
 
                     passiveIncome += GetPassiveByPlanet((HabitablePlanet)entity);
                 }

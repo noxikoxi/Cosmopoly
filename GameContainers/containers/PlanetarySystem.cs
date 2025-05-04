@@ -5,7 +5,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Size = System.Windows.Size;
 
-namespace GameContainers
+namespace GameContainers.containers
 {
     public class PlanetarySystem : Panel
     {
@@ -73,7 +73,7 @@ namespace GameContainers
 
             for (int i = 0; i < n_children; i++)
             {
-                double angleInDegrees = (360.0 / n_children) * i;
+                double angleInDegrees = 360.0 / n_children * i;
                 double angleInRadians = angleInDegrees * Math.PI / 180;
 
                 double x = centerX + RadiusX * Math.Cos(angleInRadians) - InternalChildren[i].DesiredSize.Width / 2;

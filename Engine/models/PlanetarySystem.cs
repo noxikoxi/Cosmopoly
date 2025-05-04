@@ -5,37 +5,24 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace CosmopolyEngine.models
+namespace Engine.models
 {
-    public class PlanetarySystem
+    public class PlanetarySystem(string name)
     {
 
-        private List<byte> planetsIds;
+        private List<byte> planetsIds = new List<byte>();
 
-        private string name;
+        public string Name{ get; private set; } = name;
 
         public bool IsGalacticShipyardBuilt { get; private set; }
 
         // Kopalnia w pasach asteroid
-        public byte MineLevel { get; private set; }
-        public byte MaxMineLevel { get; private set; }  // Max 5
-
-        public PlanetarySystem(string name)
-        {
-            planetsIds = new List<byte>();
-            MineLevel = 0;
-            MaxMineLevel = 5;
-            this.name = name;
-        }
+        public byte MineLevel { get; private set; } = 0;
+        public byte MaxMineLevel { get; private set; } = 5;
 
         public void UupgradeMine()
         {
             ++MineLevel;
-        }
-
-        public string GetName()
-        {
-            return name;
         }
 
         public void BuildGalacticShipyhard()
@@ -55,7 +42,7 @@ namespace CosmopolyEngine.models
 
         public override string ToString()
         {
-            return $"Układ planetarny {GetName()}; zawiera planety {string.Join(", ", planetsIds)}";
+            return $"Układ planetarny {Name}; zawiera planety {string.Join(", ", planetsIds)}";
         }
 
     }

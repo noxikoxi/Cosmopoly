@@ -4,15 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CosmopolyEngine.models
+namespace Engine.models
 {
-    class PiratePlanet : SpaceEntity
+    class PiratePlanet(byte blockedTurns) : SpaceEntity("Planeta Piratów", false)
     {
-        public byte BlockedTurns { set ; get; }
-        public PiratePlanet(byte blockedTurns) : base("Planeta Piratów", false)
-        {
-            BlockedTurns = blockedTurns;
-        }
+        public byte BlockedTurns { set; get; } = blockedTurns;
 
         protected override string ToStringInternal()
         {

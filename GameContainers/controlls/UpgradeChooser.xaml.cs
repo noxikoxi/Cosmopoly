@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Game
+namespace GameContainers.controlls
 {
     /// <summary>
-    /// Logika interakcji dla klasy Card.xaml
+    /// Logika interakcji dla klasy UpgradeChooser.xaml
     /// </summary>
-    public partial class Card : UserControl
+    public partial class UpgradeChooser : UserControl
     {
-        public Card()
+        public UpgradeChooser()
         {
             InitializeComponent();
         }
