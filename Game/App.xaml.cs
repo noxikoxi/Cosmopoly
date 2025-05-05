@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿using Engine.models;
+using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Data;
 using System.Windows;
 
@@ -9,6 +11,8 @@ namespace Game
     /// </summary>
     public partial class App : Application
     {
+        public ObservableCollection<Player> Players { get; } = new ObservableCollection<Player>();
+
     }
 
 }

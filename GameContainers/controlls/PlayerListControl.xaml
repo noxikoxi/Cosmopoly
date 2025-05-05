@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="GameContainers.controlls.PlayerListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="200" Width="200">
+
+    <Border
+        CornerRadius="10"
+        Background="#FF59156D"
+        Padding="5"
+        BorderBrush="Black"
+        BorderThickness="2">
+        <StackPanel>
+            <Label Content="Lista Graczy" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{StaticResource TextColor}" />
+            <ItemsControl ItemsSource="{Binding}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel  Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding Name}" HorizontalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource TextColor}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Border>
+</UserControl>
