@@ -4,9 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GameContainers.controlls"
-             mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="100">
-    <Grid>
+             mc:Ignorable="d"
+             MinWidth="0" MinHeight="0"
+             ClipToBounds="False"
+             >
+    <Grid ClipToBounds="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <!-- Wiersz na właściciela -->
@@ -23,13 +25,19 @@
             FontSize="10"
             Panel.ZIndex="1"
             Grid.Row="0"/>
-        <Ellipse 
-            HorizontalAlignment="Stretch" 
-            VerticalAlignment="Stretch" 
-            Fill="{Binding PlanetColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
-            Panel.ZIndex="0"
-            Grid.Row="1"
-        />
+        <Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" ClipToBounds="False">
+            <Ellipse 
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch"
+                Width="100"
+                Fill="{Binding PlanetColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Panel.ZIndex="0"
+                
+            />
+            <StackPanel ClipToBounds="False"  Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="ShipsContainer" MaxWidth="150" Height="60" Panel.ZIndex="1">
+            </StackPanel>
+            
+        </Grid>
         <Label 
             Content="{Binding PlanetName, RelativeSource={RelativeSource AncestorType=UserControl}}" 
             Foreground="{StaticResource TextColor}" 

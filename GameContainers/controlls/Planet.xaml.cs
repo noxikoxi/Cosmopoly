@@ -18,7 +18,7 @@ namespace GameContainers.controlls
     /// <summary>
     /// Logika interakcji dla klasy Planet.xaml
     /// </summary>
-    public partial class Planet : UserControl
+    public partial class Planet : UserControl, IPlanetControl
     {
         public static readonly DependencyProperty PlanetNameProperty =
             DependencyProperty.Register(
@@ -62,6 +62,11 @@ namespace GameContainers.controlls
         {
             InitializeComponent();
 
+        }
+
+        public StackPanel GetShipsContainer()
+        {
+            return ShipsContainer;
         }
     }
 }

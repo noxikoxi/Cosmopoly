@@ -2,10 +2,12 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:GameContainers.converters"
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="200" Width="200">
-
+    <UserControl.Resources>
+        <local:ShipNameToImageConverter x:Key="ShipImageConverter"/>
+    </UserControl.Resources>
     <Border
         CornerRadius="10"
         Background="#FF59156D"
@@ -17,13 +19,31 @@
             <ItemsControl ItemsSource="{Binding}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel  Orientation="Horizontal"/>
+                        <StackPanel  Orientation="Vertical"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Label Content="{Binding Name}" HorizontalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource TextColor}"/>
+                        <Grid HorizontalAlignment="Stretch" Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="0"
+                               Content="{Binding Item1}"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource TextColor}"
+                               VerticalAlignment="Center" />
+
+                            <Image Grid.Column="1"
+                               Width="30"
+                               Height="30"
+                               Margin="10,0,0,0"
+                               Source="{Binding Item2, Converter={StaticResource ShipImageConverter}}"
+                               VerticalAlignment="Center" />            
+                        </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

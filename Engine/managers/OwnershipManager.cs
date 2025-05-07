@@ -69,9 +69,9 @@ namespace Engine.managers
         {
             List<PlanetarySystem> output = [];
 
-            foreach(PlanetarySystem system in systems)
+            foreach (PlanetarySystem system in systems)
             {
-                if(IsOwnedByPlayer(player, entities, system) && system.IsGalacticShipyardBuilt)
+                if (IsOwnedByPlayer(player, entities, system) && system.IsGalacticShipyardBuilt)
                 {
                     output.Add(system);
                 }
@@ -79,6 +79,19 @@ namespace Engine.managers
 
             return output;
 
+        }
+
+        public static Dictionary<SpaceEntity, int> GetStationWithIdx(List<SpaceEntity> entities)
+        {
+            Dictionary<SpaceEntity, int> stationsWithIdx = [];
+            for (var i = 0; i < entities.Count; ++i)
+            {
+                if (entities[i] is Station station)
+                {
+                    stationsWithIdx.Add(station, i);
+                }
+            }
+            return stationsWithIdx;
         }
     }
 }

@@ -41,9 +41,14 @@ namespace Game
 
         private void AddPlayer_Click(object sender, RoutedEventArgs e)
         {
+            if (((App)Application.Current).Players.Count >= 4)
+            {
+                MessageBox.Show("Nie można dodać więcej niż 4 graczy.");
+                return;
+            }
             var name = PlayerName.Text;
             if (name != ""){ 
-                ((App)Application.Current).Players.Add(new Player(name));
+                ((App)Application.Current).Players.Add(new Tuple<string, string>(name, $"ship{((App)Application.Current).Players.Count}"));
             }
             PlayerName.Text = "";
         }

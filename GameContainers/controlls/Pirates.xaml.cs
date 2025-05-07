@@ -18,11 +18,16 @@ namespace GameContainers.controlls
     /// <summary>
     /// Logika interakcji dla klasy Pirates.xaml
     /// </summary>
-    public partial class Pirates : UserControl
+    public partial class Pirates : UserControl, IPlanetControl
     {
         public Pirates()
         {
             InitializeComponent();
+        }
+
+        public StackPanel GetShipsContainer()
+        {
+            return ShipsContainer;
         }
     }
 }

@@ -18,11 +18,16 @@ namespace GameContainers.controlls
     /// <summary>
     /// Logika interakcji dla klasy Singularity.xaml
     /// </summary>
-    public partial class Singularity : UserControl
+    public partial class Singularity : UserControl, IPlanetControl
     {
         public Singularity()
         {
             InitializeComponent();
         }
+        public StackPanel GetShipsContainer()
+        {
+            return ShipsContainer;
+        }
+
     }
 }

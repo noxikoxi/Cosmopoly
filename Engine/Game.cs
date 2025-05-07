@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Engine.managers;
+﻿using Engine.managers;
 using Engine.models;
 using Engine.utils;
 
@@ -12,7 +6,7 @@ namespace Engine
 {
     public class Game
     {
-        private Player[] _players;
+        public Player[] players;
 
         public int Turn { get; private set; }
 
@@ -34,25 +28,31 @@ namespace Engine
 
         public Game(Player[] players, string configFolderPath)
         {
-            _players = players;
+            this.players = players;
             Turn = 0;
             _currPlayer = 0;
-            upgradedPlanetsThisTurn = new();
-            upgradedSystemThisTurn = new();
 
             var cards = ConfigLoader.LoadCardConfig(Path.Combine(configFolderPath, "Cards.json"));
-            Debug.WriteLine("\n[Cosmopoly Engine] Loaded Cards");
+            Console.WriteLine("\n[Cosmopoly Engine] Loaded Cards");
 
-            Debug.WriteLine(Path.Combine(configFolderPath, "Galaxy.json"));
+            //foreach (var card in cards)
+            //{
+            //    Console.WriteLine(card);
+            //    foreach (var strategy in card.strategies)
+            //    {
+            //        Console.WriteLine(strategy);
+            //    }
+            //    Console.WriteLine("");
+            //}
 
             (Entities, PlanetarySystems) = ConfigLoader.LoadGalaxyConfig(Path.Combine(configFolderPath, "Galaxy.json"));
 
-            if(Entities.Count == 0 || PlanetarySystems.Count == 0)
+            if (Entities.Count == 0 || PlanetarySystems.Count == 0)
             {
                 throw new Exception("Unable to load galaxy config");
             }
 
-            Debug.WriteLine("\n[Cosmopoly Engine] Loaded Galaxy");
+            Console.WriteLine("\n[Cosmopoly Engine] Loaded Galaxy");
 
             foreach (SpaceEntity entity in Entities)
             {
@@ -67,13 +67,16 @@ namespace Engine
 
             FinanceManager? manager = ConfigLoader.LoadFinanceManagerConfig(Path.Combine(configFolderPath, "Finance.json"));
 
-            if(manager == null)
+            if (manager == null)
             {
                 throw new Exception("Unable to load Finance Config");
             }
 
             _fManager = manager;
-            Debug.WriteLine("\n[Cosmopoly Engine] Loaded Finance Manager");
+            Console.WriteLine("\n[Cosmopoly Engine] Loaded Finance Manager");
+
+            upgradedPlanetsThisTurn = new();
+            upgradedSystemThisTurn = new();
         }
 
         public long GetPlayerPassiveIncome(Player player)
@@ -97,6 +100,14 @@ namespace Engine
             return true;
         }
 
+        public void SetInitialCredits()
+        {
+            foreach (var player in this.players)
+            {
+                player.credits = _fManager.GetInitialPlayerCredits();
+            }
+        }
+
         public void RemoveCredits(Player player, long credits)
         {
             player.credits -= credits;
@@ -105,6 +116,11 @@ namespace Engine
         public bool IsPlayerInBankruptcy(Player player)
         {
             return player.credits <= 0;
+        }
+
+        public Random GetRandom()
+        {
+            return this._random;
         }
 
         public void RemoveBankruptPlayer(Player player)
@@ -128,7 +144,7 @@ namespace Engine
             player.IsBankrupt = true;
         }
 
-        public long getCurrentPositionHousingCost()
+        public long GetCurrentPositionHousingCost()
         {
             if (Entities[GetCurrentPlayer().position] is HabitablePlanet planet)
             {
@@ -138,29 +154,41 @@ namespace Engine
             return 0;
         }
 
+        public Dictionary<SpaceEntity, int> GetStationWithIdx()
+        {
+            return OwnershipManager.GetStationWithIdx(Entities);
+        }
+
+        public long GetCurrentPlayerPropertyTax(double taxPercentage)
+        {
+            return _fManager.GetPropertyTax(GetCurrentPlayer(), Entities, taxPercentage);
+        }
+
         public void NextPlayer()
         {
-            ++_currPlayer;
-            if (_currPlayer >= _players_count)
+            ++this._currPlayer;
+            if (this._currPlayer >= _players_count)
             {
-                Turn++;
-                _currPlayer %= _players_count;
+                this.Turn++;
+                this._currPlayer %= _players_count;
             }
             var player = GetCurrentPlayer();
 
             if (player.IsBankrupt)
             {
                 NextPlayer();
-            } else if (player.BlockedTurns > 0)
+            }
+            else if (player.BlockedTurns > 0)
             {
                 player.BlockedTurns--;
                 NextPlayer();
             }
+            ResetPlayerUpgradesThisTurn();
         }
 
         public int RollDice()
         {
-            int diceRoll = _random.Next(6) + 1; // from 1 to 6
+            int diceRoll = this._random.Next(6) + 1; // from 1 to 6
             return diceRoll;
         }
 
@@ -169,7 +197,7 @@ namespace Engine
 
             if (newPosition >= 0 && newPosition < _total_entities)
             {
-                _players[_currPlayer].position = newPosition;
+                this.players[this._currPlayer].position = newPosition;
             }
             else
             {
@@ -179,24 +207,24 @@ namespace Engine
 
         public int MovePlayerByPoints(int points)
         {
-            int newPostion = (_players[_currPlayer].position + points) % _total_entities;
-            _players[_currPlayer].position = newPostion;
+            int newPostion = (this.players[this._currPlayer].position + points) % _total_entities;
+            this.players[this._currPlayer].position = newPostion;
 
             return newPostion;
         }
 
         public SpaceEntity GetCurrentPlayerPositionEntity()
         {
-            return Entities[GetCurrentPlayer().position];
+            return this.Entities[GetCurrentPlayer().position];
         }
 
         public Card GetCardFromSingularity()
         {
-            if (Entities[GetCurrentPlayer().position].GetType() != typeof(Singularity))
+            if (this.Entities[GetCurrentPlayer().position].GetType() != typeof(Singularity))
             {
                 throw new Exception("Current position is not Singularity");
             }
-            return ((Singularity)Entities[GetCurrentPlayer().position]).GetRandomCard(PlanetarySystems, _random);
+            return ((Singularity)this.Entities[GetCurrentPlayer().position]).GetRandomCard(PlanetarySystems, _random);
         }
 
         public void BlockPlayer(int turns)
@@ -206,24 +234,34 @@ namespace Engine
 
         public void SkipPlayerTurn()
         {
-            if (_players[_currPlayer].SkippedTurns < 2)
+            if (this.players[this._currPlayer].SkippedTurns < 2)
             {
-                _players[_currPlayer].SkipTurn();
+                this.players[this._currPlayer].SkipTurn();
                 NextPlayer();
             }
         }
 
         public Player GetCurrentPlayer()
         {
-            return _players[_currPlayer];
+            return this.players[this._currPlayer];
         }
-           
+
+        public int GetCurrentPlayerIndex()
+        {
+            return this._currPlayer;
+        }
+
+        public PlanetarySystem? GetPlanetarySystem(SpaceEntity entity)
+        {
+            return OwnershipManager.GetPlanetSystem((byte)Entities.IndexOf(entity), PlanetarySystems);
+        }
+
         // Upgrades
 
         public void ResetPlayerUpgradesThisTurn()
         {
-            upgradedPlanetsThisTurn = new();
-            upgradedSystemThisTurn = new();
+            upgradedPlanetsThisTurn.Clear();
+            upgradedSystemThisTurn.Clear();
             foreach (HabitablePlanet planet in GetPlayerPlanets())
             {
                 upgradedPlanetsThisTurn.Add(planet, false);
@@ -245,15 +283,10 @@ namespace Engine
             return OwnershipManager.GetPlayerSystemGalacticShipyards(GetCurrentPlayer(), Entities, PlanetarySystems);
         }
 
-        public PlanetarySystem? GetPlanetarySystem(models.SpaceEntity entity)
-        {
-            return OwnershipManager.GetPlanetSystem((byte)Entities.IndexOf(entity), PlanetarySystems);
-        }
-
         public Dictionary<string, int> GetPossibleSystemUpgrades(PlanetarySystem system)
         {
             // No more upgrades this turn
-            if(upgradedSystemThisTurn.ContainsKey(system) && upgradedSystemThisTurn[system] == false)
+            if (upgradedSystemThisTurn.ContainsKey(system) && upgradedSystemThisTurn[system] == false)
             {
                 return new Dictionary<string, int>();
             }
@@ -294,7 +327,7 @@ namespace Engine
 
             foreach (var building in buildings)
             {
-                if(building == "Hotel")
+                if (building == "Hotel")
                 {
                     upgrades.Add("Hotel", h_costs);
                 }
@@ -353,15 +386,49 @@ namespace Engine
         }
 
         // CARDS
-        public List<Card> GetCurrentPlayerCards()
+        public int GetCurrentPlayerPirateCards()
         {
-            return _players[_currPlayer].cards;
+            var cards = 0;
+
+            foreach(var card in this.players[_currPlayer].cards)
+            {
+                if (card.strategies[0].Type == Engine.strategies.strategyType.Shield)
+                {
+                    cards++;
+                }
+            }
+            return cards;
         }
 
-        public void UsePlayerCard(int cardId)
+        public void ApplyCard(Card card, int startegyOption = 0)
         {
-            // TODO:
-            _players[_currPlayer].cards.RemoveAt(cardId);
+            // Move i Shield musze obsłużyc tutaj, reszta jest w CardStrategy
+            if (card.strategies[0].Type == Engine.strategies.strategyType.Shield)
+            {
+                // W zasadzie to ta karta tylko anuluje atak piratów, więc wystraczy ją usunąc z ręki gracza
+                this.players[_currPlayer].cards.Remove(card);
+
+            }
+            else if (card.strategies[0].Type == Engine.strategies.strategyType.Move)
+            {
+                // Należy wybrac nową pozycje, podana przez argument stategyOption jako index planety do której idzie gracz
+                MovePlayerToPostion(startegyOption);
+            }
+            else
+            {
+
+                if (card.ApplyTogether)
+                {
+                    foreach (var strategy in card.strategies)
+                    {
+                        strategy.Apply(this);
+                    }
+                }
+                else
+                {
+                    card.strategies[startegyOption].Apply(this);
+                }
+            }
         }
     }
 }

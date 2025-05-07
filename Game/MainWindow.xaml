@@ -15,8 +15,9 @@
                 <GradientStop Color="#FF131313" Offset="0.483"/>
             </RadialGradientBrush>
         </Grid.Background>
-        <controlls:PlayerInfo HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <controlls:GameButtons HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+        <controlls:PlayerInfo x:Name="PlayerInfo" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <controlls:GameButtons x:Name="GameButtons" HorizontalAlignment="Right" VerticalAlignment="Bottom" Dice_Clicked="GameButtons_Dice_Clicked" Upgrade_Clicked="GameButtons_Upgrade_Clicked"/>
+        <controlls:PlayerListControl x:Name="PlayersList" VerticalAlignment="Top" HorizontalAlignment="Right"/>
         <containers:PlanetarySystem x:Name="Galaxy" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RadiusX="0.4" RadiusY="0.35" PercentageSize="0.9"/>
         <containers:PlanetarySystem x:Name="GalaxInside" HorizontalAlignment="Center" VerticalAlignment="Center" RadiusX="0.4" RadiusY="0.30" PercentageSize="0.4"/>
     </Grid>

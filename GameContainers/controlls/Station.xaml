@@ -12,8 +12,9 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="{Binding StationName, RelativeSource={RelativeSource AncestorType=UserControl}}" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{StaticResource TextColor}" />
-        <Border Grid.Row="1" Padding="10" >
-            <Border
+        <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+            <Border Padding="10" >
+                <Border
                  
                 HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch" 
@@ -21,11 +22,14 @@
                 CornerRadius="10"
                 Background="#FF394856"
             >
-                <Ellipse Fill="#FF414A4A" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Ellipse Fill="#FF414A4A" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
-                </Ellipse>
+                    </Ellipse>
+                </Border>
             </Border>
-        </Border>
+            <StackPanel ClipToBounds="False"  Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="ShipsContainer" MaxWidth="150" Height="60" Panel.ZIndex="1">
+            </StackPanel>
+        </Grid>
 
     </Grid>
 </UserControl>

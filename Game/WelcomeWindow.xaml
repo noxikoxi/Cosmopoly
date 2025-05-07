@@ -10,7 +10,8 @@
         <Grid.Background>
             <RadialGradientBrush>
                 <GradientStop Color="#FF2C0A30" Offset="1"/>
-                <GradientStop Color="#FFD347E6" Offset="0.015"/>
+                <GradientStop Color="#FF9A18AB" Offset="0.015"/>
+                <GradientStop Color="#FF340D39" Offset="0.93"/>
             </RadialGradientBrush>
         </Grid.Background>
         <controlls:PlayerListControl x:Name="PlayersList" HorizontalAlignment="Right" VerticalAlignment="Top"/>
@@ -18,8 +19,8 @@
             <Label Content="Cosmopoly" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="35">
                 <Label.Foreground>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="Black"/>
-                        <GradientStop Color="#FFF71111" Offset="1"/>
+                        <GradientStop Color="#FF886F6F"/>
+                        <GradientStop Color="#FF080303" Offset="1"/>
                     </LinearGradientBrush>
                 </Label.Foreground>
             </Label>

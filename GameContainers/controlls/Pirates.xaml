@@ -12,17 +12,18 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Planeta Piratów" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{StaticResource TextColor}" />
-        <Ellipse Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Ellipse.Fill>
-                <RadialGradientBrush>
-                    <GradientStop Color="#FF21985E" Offset="0.043"/>
-                    <GradientStop Color="#FF502004" Offset="0.98"/>
-                    <GradientStop Color="#FF92651D" Offset="0.491"/>
-                </RadialGradientBrush>
-            </Ellipse.Fill>
-
-        </Ellipse>
-
-
+        <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Ellipse  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="120">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#FF21985E" Offset="0.043"/>
+                        <GradientStop Color="#FF502004" Offset="0.98"/>
+                        <GradientStop Color="#FF92651D" Offset="0.491"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+            <StackPanel ClipToBounds="False"  Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="ShipsContainer" MaxWidth="150" Height="60" Panel.ZIndex="1">
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

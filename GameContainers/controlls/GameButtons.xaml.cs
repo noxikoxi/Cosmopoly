@@ -20,9 +20,27 @@ namespace GameContainers.controlls
     /// </summary>
     public partial class GameButtons : UserControl
     {
+        public event EventHandler Dice_Clicked;
+        public event EventHandler Upgrade_Clicked;
         public GameButtons()
         {
             InitializeComponent();
+        }
+
+        public int DiceRollsCount
+        {
+            get => int.Parse(DiceRolls.Content.ToString());
+            set => DiceRolls.Content = value.ToString();
+        }
+
+        private void Dice_Click(object sender, RoutedEventArgs e)
+        {
+            Dice_Clicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void Upgrade_Click(object sender, RoutedEventArgs e)
+        {
+            Upgrade_Clicked?.Invoke(this, EventArgs.Empty);
         }
     }
 }

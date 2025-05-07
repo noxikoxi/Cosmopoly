@@ -7,27 +7,41 @@ using System.Threading.Tasks;
 
 namespace Engine.models
 {
-    public class PlanetarySystem(string name)
+    public class PlanetarySystem
     {
 
-        private List<byte> planetsIds = new List<byte>();
+        private List<byte> planetsIds;
 
-        public string Name{ get; private set; } = name;
+        public string Name { get; private set; }
 
         public bool IsGalacticShipyardBuilt { get; private set; }
 
         // Kopalnia w pasach asteroid
-        public byte MineLevel { get; private set; } = 0;
-        public byte MaxMineLevel { get; private set; } = 5;
+        public byte MineLevel { get; private set; }
+        public byte MaxMineLevel { get; private set; }  // Max 5
+
+        public PlanetarySystem(string name)
+        {
+            planetsIds = new List<byte>();
+            MineLevel = 0;
+            MaxMineLevel = 5;
+            Name = name;
+        }
 
         public void UupgradeMine()
         {
             ++MineLevel;
         }
 
+
         public void BuildGalacticShipyhard()
         {
-            IsGalacticShipyardBuilt=true;
+            IsGalacticShipyardBuilt = true;
+        }
+
+        public void DestroyGalacticShipyard()
+        {
+            IsGalacticShipyardBuilt = false;
         }
 
         public void AddPlanet(byte planetId)
@@ -35,7 +49,7 @@ namespace Engine.models
             planetsIds.Add(planetId);
         }
 
-        public List<byte> GetPlanetsIds() 
+        public List<byte> GetPlanetsIds()
         {
             return planetsIds;
         }

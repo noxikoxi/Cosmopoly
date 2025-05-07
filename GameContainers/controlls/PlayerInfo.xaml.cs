@@ -25,18 +25,22 @@ namespace GameContainers.controlls
             InitializeComponent();
         }
 
-        public void SetPlayer(string player_name)
+        public string PlayerNameText
         {
-            PlayerName.Content = player_name;
-        }
-        public void SetCredits(long credits)
-        {
-            Credits.Content = credits.ToString();
+            get => PlayerName.Content.ToString();
+            set => PlayerName.Content = value;
         }
 
-        public void SetCardsCount(int count)
+        public long CreditsAmount
         {
-            PirateCards.Content = count;
+            get => long.Parse(Credits.Content.ToString());
+            set => Credits.Content = value.ToString();
+        }
+
+        public int PirateCardCount
+        {
+            get => int.Parse(PirateCards.Content.ToString());
+            set => PirateCards.Content = value.ToString();
         }
     }
 }

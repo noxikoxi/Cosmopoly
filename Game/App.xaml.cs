@@ -9,9 +9,11 @@ namespace Game
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
+    /// 
+    
     public partial class App : Application
     {
-        public ObservableCollection<Player> Players { get; } = new ObservableCollection<Player>();
+        public ObservableCollection<Tuple<string, string>> Players { get; } = new();
 
 
     }

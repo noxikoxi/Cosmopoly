@@ -87,8 +87,8 @@ namespace Engine.managers
         }
 
         public FinanceManager(
-            int passiveBase, 
-            int passiveByGalacticShipyard, 
+            int passiveBase,
+            int passiveByGalacticShipyard,
             int[] passiveByMineLevel,
             int[] passiveByFarmLevel,
             int[] passiveByAsteroidMineLevel,
@@ -122,15 +122,34 @@ namespace Engine.managers
             return (hotelCost, mineCost, farmCost);
         }
 
+        public long GetInitialPlayerCredits()
+        {
+            return this.passiveBase * 3;
+        }
+
         public (int, int) GetPlanetarySystemUpgradeCosts(PlanetarySystem system)
         {
-            int mineCost = system.MineLevel == costUpgradeAsteroidMine.Length ? 0 :  costUpgradeAsteroidMine[system.MineLevel];
+            int mineCost = system.MineLevel == costUpgradeAsteroidMine.Length ? 0 : costUpgradeAsteroidMine[system.MineLevel];
             int galacticShipyardCost = 0;
             if (!system.IsGalacticShipyardBuilt)
             {
                 galacticShipyardCost = costBuildShipyard;
             }
             return (mineCost, galacticShipyardCost);
+        }
+
+        public long GetPropertyTax(Player player, List<SpaceEntity> entities, double taxPercentage = 0.03)
+        {
+            var playerPlanets = OwnershipManager.GetPlayerPlanets(entities, player);
+            long tax = 0;
+            foreach (var planet in playerPlanets)
+            {
+                tax += this.costUpgradeHotel[planet.HotelLevel];
+                tax += this.costUpgradeFarm[planet.FarmLevel];
+                tax += this.costUpgradeMine[planet.MineLevel];
+            }
+
+            return (long)(tax * taxPercentage);
         }
 
         public long GetHousingCost(HabitablePlanet planet)
@@ -151,7 +170,8 @@ namespace Engine.managers
             long passiveIncome = passiveBase;
             foreach (SpaceEntity entity in entities)
             {
-                if (entity.IsHabitable && ((HabitablePlanet)entity).Owner == player) {
+                if (entity.IsHabitable && ((HabitablePlanet)entity).Owner == player)
+                {
 
                     passiveIncome += GetPassiveByPlanet((HabitablePlanet)entity);
                 }
@@ -159,11 +179,11 @@ namespace Engine.managers
 
             foreach (PlanetarySystem system in systems)
             {
-               
+
                 if (OwnershipManager.IsOwnedByPlayer(player, entities, system))
                 {
                     passiveIncome += passiveByAsteroidMineLevel[system.MineLevel];
-                    if(system.IsGalacticShipyardBuilt)
+                    if (system.IsGalacticShipyardBuilt)
                     {
                         passiveIncome += passiveByGalacticShipyard;
                     }

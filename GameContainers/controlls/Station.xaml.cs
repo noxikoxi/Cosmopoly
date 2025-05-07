@@ -18,7 +18,7 @@ namespace GameContainers.controlls
     /// <summary>
     /// Logika interakcji dla klasy Station.xaml
     /// </summary>
-    public partial class Station : UserControl
+    public partial class Station : UserControl, IPlanetControl
     {
         public static readonly DependencyProperty StationNameProperty =
             DependencyProperty.Register(
@@ -36,6 +36,10 @@ namespace GameContainers.controlls
         public Station()
         {
             InitializeComponent();
+        }
+        public StackPanel GetShipsContainer()
+        {
+            return ShipsContainer;
         }
     }
 }
