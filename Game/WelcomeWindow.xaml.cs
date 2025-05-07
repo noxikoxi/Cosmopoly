@@ -28,6 +28,11 @@ namespace Game
 
         private void StartGame_Click(object sender, RoutedEventArgs e)
         {
+            if( ((App)Application.Current).Players.Count < 2)
+            {
+                MessageBox.Show("Dodaj przynajmniej 2 graczy aby rozpocząć grę.");
+                return;
+            }
             MainWindow gameWindow = new MainWindow();
             gameWindow.Show();
 

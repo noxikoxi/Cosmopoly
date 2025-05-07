@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,7 +41,9 @@ namespace Engine
             upgradedSystemThisTurn = new();
 
             var cards = ConfigLoader.LoadCardConfig(Path.Combine(configFolderPath, "Cards.json"));
-            Console.WriteLine("\n[Cosmopoly Engine] Loaded Cards");
+            Debug.WriteLine("\n[Cosmopoly Engine] Loaded Cards");
+
+            Debug.WriteLine(Path.Combine(configFolderPath, "Galaxy.json"));
 
             (Entities, PlanetarySystems) = ConfigLoader.LoadGalaxyConfig(Path.Combine(configFolderPath, "Galaxy.json"));
 
@@ -49,7 +52,7 @@ namespace Engine
                 throw new Exception("Unable to load galaxy config");
             }
 
-            Console.WriteLine("\n[Cosmopoly Engine] Loaded Galaxy");
+            Debug.WriteLine("\n[Cosmopoly Engine] Loaded Galaxy");
 
             foreach (SpaceEntity entity in Entities)
             {
@@ -70,7 +73,7 @@ namespace Engine
             }
 
             _fManager = manager;
-            Console.WriteLine("\n[Cosmopoly Engine] Loaded Finance Manager");
+            Debug.WriteLine("\n[Cosmopoly Engine] Loaded Finance Manager");
         }
 
         public long GetPlayerPassiveIncome(Player player)
@@ -240,6 +243,11 @@ namespace Engine
         public List<PlanetarySystem> GetPlayerSystems()
         {
             return OwnershipManager.GetPlayerSystemGalacticShipyards(GetCurrentPlayer(), Entities, PlanetarySystems);
+        }
+
+        public PlanetarySystem? GetPlanetarySystem(models.SpaceEntity entity)
+        {
+            return OwnershipManager.GetPlanetSystem((byte)Entities.IndexOf(entity), PlanetarySystems);
         }
 
         public Dictionary<string, int> GetPossibleSystemUpgrades(PlanetarySystem system)

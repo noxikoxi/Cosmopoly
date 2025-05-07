@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Engine.models
 {
-    internal class Singularity : SpaceEntity
+    public class Singularity : SpaceEntity
     {
         private List<Card> possibleCards;
 

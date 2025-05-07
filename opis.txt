@@ -1,0 +1,17 @@
+Zaawansowane Interfejsy Graficzne
+Zadanie 8 - Interfejs graficzny do gry
+Autor: Tomasz Cach
+
+Solucja zawiera 3 projekty:
+- Engine -> silnik, logika gry
+- GameContainers -> kontrolki i kontenery wykorzystywane w grze, plus słowniki zasobów
+- Game -> aplikacja WPF, okienko umożliwiające grę 
+
+Wszystkie stworzone na potrzeby gry kontrolki są zademonstrowane w aplikacji WPF.
+Są one bez oprogramowanej funkcjonalności, mają docelowy wygląd.
+
+Aby uruchomić solucje należy wykonać:
+- Game\bin\Release\net8.0-windows\Game.exe
+
+Innym sposobem jest otworzenie solucji i uruchomienie projektu z menu.
+- Cosmopoly.sln

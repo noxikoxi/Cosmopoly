@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -9,12 +10,33 @@ namespace GameContainers.containers
 {
     public class PlanetarySystem : Panel
     {
+        public static readonly DependencyProperty SystemNameProperty =
+           DependencyProperty.Register(
+               nameof(SystemName),
+               typeof(string),
+               typeof(PlanetarySystem),
+               new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.AffectsArrange, new PropertyChangedCallback(OnSystemNameChanged)));
+
+        private static void OnSystemNameChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is PlanetarySystem ps && ps.systemLabel != null)
+            {
+                ps.systemLabel.Content = e.NewValue?.ToString();
+            }
+        }
+
+        public string SystemName
+        {
+            get => (string)GetValue(SystemNameProperty);
+            set => SetValue(SystemNameProperty,value);
+        }
+
         public static readonly DependencyProperty RadiusXProperty =
         DependencyProperty.Register(
             nameof(RadiusX),
             typeof(double),
             typeof(PlanetarySystem),
-            new FrameworkPropertyMetadata(100.0, FrameworkPropertyMetadataOptions.AffectsArrange));
+            new FrameworkPropertyMetadata(0.4, FrameworkPropertyMetadataOptions.AffectsArrange));
 
         public double RadiusX
         {
@@ -27,7 +49,7 @@ namespace GameContainers.containers
             nameof(RadiusY), 
             typeof(double), 
             typeof(PlanetarySystem),
-            new FrameworkPropertyMetadata(100.0, FrameworkPropertyMetadataOptions.AffectsArrange));
+            new FrameworkPropertyMetadata(0.4, FrameworkPropertyMetadataOptions.AffectsArrange));
 
         public double RadiusY
         {
@@ -35,32 +57,45 @@ namespace GameContainers.containers
             set => SetValue(RadiusYProperty, value);
         }
 
+        public static readonly DependencyProperty PercentageSizeProperty =
+        DependencyProperty.Register(
+            nameof(PercentageSize),
+            typeof(double),
+            typeof(PlanetarySystem),
+            new FrameworkPropertyMetadata(1.0, FrameworkPropertyMetadataOptions.AffectsArrange));
+
+        public double PercentageSize
+        {
+            get => (double)GetValue(PercentageSizeProperty);
+            set => SetValue(PercentageSizeProperty, value);
+        }
+
+        private readonly Label systemLabel;
 
         public PlanetarySystem() : base()
         {
+            systemLabel = new Label
+            {
+                Content = SystemName,
+                FontSize = 18,
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.White,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                IsHitTestVisible = false,
+            };
+
+            Children.Add(systemLabel);
         }
 
         protected override Size MeasureOverride(Size availableSize)
         {
-            double maxChildWidth = 0;
-            double maxChildHeight = 0;
-
             foreach (UIElement child in InternalChildren)
             {
                 child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-
-                if (child.DesiredSize.Width > maxChildWidth)
-                    maxChildWidth = child.DesiredSize.Width;
-
-                if (child.DesiredSize.Height > maxChildHeight)
-                    maxChildHeight = child.DesiredSize.Height;
             }
 
-
-            double totalWidth = RadiusX * 2 + maxChildWidth;
-            double totalHeight = RadiusY * 2 + maxChildHeight;
-
-            return new Size(totalWidth, totalHeight);
+            return availableSize;
         }
 
         protected override Size ArrangeOverride(Size finalSize)
@@ -71,13 +106,18 @@ namespace GameContainers.containers
             double centerX = finalSize.Width / 2;
             double centerY = finalSize.Height / 2;
 
-            for (int i = 0; i < n_children; i++)
-            {
-                double angleInDegrees = 360.0 / n_children * i;
-                double angleInRadians = angleInDegrees * Math.PI / 180;
+            double radiusX = PercentageSize * finalSize.Width * RadiusX;
+            double radiusY = PercentageSize * finalSize.Height * RadiusY;
 
-                double x = centerX + RadiusX * Math.Cos(angleInRadians) - InternalChildren[i].DesiredSize.Width / 2;
-                double y = centerY + RadiusY * Math.Sin(angleInRadians) - InternalChildren[i].DesiredSize.Height / 2;
+            InternalChildren[0].Arrange(new Rect(new System.Windows.Point(centerX - InternalChildren[0].DesiredSize.Width/2, centerY - InternalChildren[0].DesiredSize.Height /2), InternalChildren[0].DesiredSize));
+
+            for (int i = 1; i < n_children; i++)
+            {
+                double baseAngle = 360.0 / (n_children-1) * i;
+                double angleInRadians = baseAngle * Math.PI / 180;
+
+                double x = centerX + radiusX * Math.Cos(angleInRadians) - InternalChildren[i].DesiredSize.Width / 2;
+                double y = centerY + radiusY * Math.Sin(angleInRadians) - InternalChildren[i].DesiredSize.Height / 2;
 
                 InternalChildren[i].Arrange(new Rect(new System.Windows.Point(x, y), InternalChildren[i].DesiredSize));
             }

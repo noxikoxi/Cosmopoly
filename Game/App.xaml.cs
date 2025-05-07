@@ -13,6 +13,7 @@ namespace Game
     {
         public ObservableCollection<Player> Players { get; } = new ObservableCollection<Player>();
 
+
     }
 
 }

@@ -26,6 +26,11 @@
             "system": "Solvantis"
         },
         {
+            "name": "Nebula Nexus",
+            "type": "Station",
+            "system": null
+        },
+        {
             "name": null,
             "type": "Singularity",
             "system": null
@@ -34,12 +39,7 @@
             "name": "Erebus-9",
             "type": "Planet",
             "system": "Nyxaris"
-        },
-        {
-            "name": "Nebula Nexus",
-            "type": "Station",
-            "system": null
-        },
+        }, 
         {
             "name": "Nox'Vera",
             "type": "Planet",
@@ -76,14 +76,9 @@
             "system": "Ignis Prime"
         },
         {
-            "name": "Orion Prime Dock",
+            "name": "Orion Prime",
             "type": "Station",
             "system": null
-        },
-        {
-            "name": "Aelion",
-            "type": "Planet",
-            "system": "Zephyros"
         },
         {
             "name": null,
@@ -91,11 +86,16 @@
             "system": null
         },
         {
+            "name": "Aelion",
+            "type": "Planet",
+            "system": "Zephyros"
+        },
+        
+        {
             "name": "Borealis-7",
             "type": "Planet",
             "system": "Zephyros"
         },
-
         {
             "name": "Cirrha",
             "type": "Planet",
@@ -107,6 +107,11 @@
             "system": "Zephyros"
         },
         {
+            "name": null,
+            "type": "Pirates",
+            "system": null
+        },
+        {
             "name": "ExoTransit-9",
             "type": "Station",
             "system": null
@@ -115,11 +120,6 @@
             "name": "Tyrranis Major",
             "type": "Planet",
             "system": "Tyrran Expanse"
-        },
-        {
-            "name": null,
-            "type": "Pirates",
-            "system": null
         },
         {
             "name": "Xerathis",

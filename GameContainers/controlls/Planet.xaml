@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="GameContainers.controlls.Planet"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GameContainers.controlls"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="100">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Wiersz na właściciela -->
+            <RowDefinition Height="*"/>
+            <!-- Wiersz na elipsę -->
+            <RowDefinition Height="Auto"/>
+            <!-- Wiersz na nazwę planety -->
+        </Grid.RowDefinitions>
+        <Label 
+            Content="{Binding PlanetOwner, RelativeSource={RelativeSource AncestorType=UserControl}}"
+            Foreground="{StaticResource TextColor}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            FontSize="10"
+            Panel.ZIndex="1"
+            Grid.Row="0"/>
+        <Ellipse 
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch" 
+            Fill="{Binding PlanetColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
+            Panel.ZIndex="0"
+            Grid.Row="1"
+        />
+        <Label 
+            Content="{Binding PlanetName, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+            Foreground="{StaticResource TextColor}" 
+            FontSize="10"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Panel.ZIndex="1"
+            Grid.Row="2"
+        />
+    </Grid>
+</UserControl>

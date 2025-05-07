@@ -8,7 +8,7 @@
             <SolidColorBrush x:Key="ButtonBackground" Color="#CBBA8A"/>
             <SolidColorBrush x:Key="ButtonBackgroundHover" Color="#D9CF98"/>
             <SolidColorBrush x:Key="TextColor" Color="#F9F9F9"/>
-            <SolidColorBrush x:Key="ContainerBackground" Color="#64576B"/>
+            <SolidColorBrush x:Key="ContainerBackground" Color="#FF58177B"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/GameContainers;component/styles/RoundedButton.xaml"/>
                 <ResourceDictionary Source="/GameContainers;component/styles/WelcomePageButton.xaml"/>

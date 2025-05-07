@@ -4,18 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Game"
-        xmlns:controlls="clr-namespace:GameContainers.controlls;assembly=GameContainers" x:Class="Game.MainWindow"
+        xmlns:controlls="clr-namespace:GameContainers.controlls;assembly=GameContainers" xmlns:containers="clr-namespace:GameContainers.containers;assembly=GameContainers" x:Class="Game.MainWindow"
         mc:Ignorable="d"
-        Title="Cosmopoly" Height="800" Width="1200">
+        Title="Cosmopoly" Height="1000" Width="1600">
     <Grid>
-
+        <Grid.Background>
+            <RadialGradientBrush>
+                <GradientStop Color="Black" Offset="1"/>
+                <GradientStop Color="#FF1B1A1A" Offset="0"/>
+                <GradientStop Color="#FF131313" Offset="0.483"/>
+            </RadialGradientBrush>
+        </Grid.Background>
         <controlls:PlayerInfo HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <controlls:GameButtons HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-        <controlls:Card HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="308"/>
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top">
-            <controlls:EntityChooser x:Name="MyEntityChooser" />
-            <controlls:StationChooser x:Name="StationChooser"/>
-            <controlls:UpgradeChooser x:Name="UpgradeChooser"/>
-        </StackPanel>
+        <containers:PlanetarySystem x:Name="Galaxy" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RadiusX="0.4" RadiusY="0.35" PercentageSize="0.9"/>
+        <containers:PlanetarySystem x:Name="GalaxInside" HorizontalAlignment="Center" VerticalAlignment="Center" RadiusX="0.4" RadiusY="0.30" PercentageSize="0.4"/>
     </Grid>
 </Window>
