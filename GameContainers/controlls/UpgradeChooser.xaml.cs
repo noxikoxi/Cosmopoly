@@ -20,9 +20,14 @@ namespace GameContainers.controlls
     /// </summary>
     public partial class UpgradeChooser : UserControl
     {
+        public event EventHandler Exit_Clicked;
         public UpgradeChooser()
         {
             InitializeComponent();
         }
+        private void UpgradeChooser_Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Exit_Clicked?.Invoke(this, EventArgs.Empty);
+         }
     }
 }

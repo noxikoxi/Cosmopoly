@@ -10,17 +10,17 @@
         <Grid.Background>
             <RadialGradientBrush>
                 <GradientStop Color="#FF2C0A30" Offset="1"/>
-                <GradientStop Color="#FF9A18AB" Offset="0.015"/>
-                <GradientStop Color="#FF340D39" Offset="0.93"/>
+                <GradientStop Color="Black" Offset="0.015"/>
+                <GradientStop Color="#FF340D39" Offset="0.712"/>
             </RadialGradientBrush>
         </Grid.Background>
         <controlls:PlayerListControl x:Name="PlayersList" HorizontalAlignment="Right" VerticalAlignment="Top"/>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Label Content="Cosmopoly" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="35">
+            <Label Content="Cosmopoly" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40">
                 <Label.Foreground>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#FF886F6F"/>
-                        <GradientStop Color="#FF080303" Offset="1"/>
+                        <GradientStop Color="#FFD8B6B6"/>
+                        <GradientStop Color="#FFA01B1B" Offset="1"/>
                     </LinearGradientBrush>
                 </Label.Foreground>
             </Label>
@@ -35,7 +35,7 @@
                     Text="Nazwa Gracza" 
                     FontSize="20" 
                     MaxWidth="200" 
-                    Foreground="#FF290707" 
+                    Foreground="{StaticResource TextColor}" 
                     VerticalAlignment="Center" 
                     Background="Transparent"
                     BorderThickness="0"

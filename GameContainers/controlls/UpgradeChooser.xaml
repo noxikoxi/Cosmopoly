@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GameContainers.controlls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="600" MaxWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" MaxWidth="800" MinHeight="200" MinWidth="600">
     <Border
     CornerRadius="10"
     Background="{StaticResource ContainerBackground}"
@@ -13,7 +13,17 @@
     BorderThickness="3"
     >
         <StackPanel x:Name="ParentStackPanel">
-            <Label x:Name="Title" Content="Wybierz budynek do ulepszenia" FontWeight="Bold" HorizontalAlignment="Center" FontSize="25" Foreground="{StaticResource TextColor}"/>
+            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Label x:Name="Title" Content="Wybierz budynek do ulepszenia" FontWeight="Bold" FontSize="25" Foreground="{StaticResource TextColor}" HorizontalAlignment="Center"/>
+                <Button x:Name="Exit" 
+                    Content="Wyjdź" 
+                    Width="70" 
+                    Height="30"
+                    Background="Transparent"
+                    Style="{StaticResource ExitButton}" Click="UpgradeChooser_Exit_Click"
+                    HorizontalAlignment="Right"
+                    />
+            </Grid>
             <Line
     X1="0" Y1="0" X2="{Binding ActualWidth, ElementName=ParentStackPanel}" Y2="0"
     Stroke="Black" StrokeThickness="5"/>
@@ -32,13 +42,14 @@
                                 <Label Content="{Binding Level}" HorizontalAlignment="Center" FontWeight="Normal" Foreground="{StaticResource TextColor}"/>
                             </StackPanel>
                             <Button 
-                            Content="{Binding Name}" 
-                            Width="80" 
-                            Height="80" 
-                            Background="Moccasin"
-                            Tag="2"
-                            Style="{StaticResource RoundedButton}"
-                            />
+                                Content="{Binding Name}" 
+                                Width="80" 
+                                Height="80" 
+                                Background="Moccasin"
+                                Command="{Binding UpgradeBuilding}"  
+                                CommandParameter="{Binding}" 
+                                Style="{StaticResource RoundedButton}"
+                                />
                             <Label Content="{Binding Effect}" HorizontalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource TextColor}"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Label HorizontalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource TextColor}" Content="Koszt"/>

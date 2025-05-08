@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GameContainers.controlls"
              mc:Ignorable="d" 
-             d:DesignHeight="370" d:DesignWidth="300" Height="370">
+             d:DesignHeight="370" d:DesignWidth="400" Height="370">
     <Border
         CornerRadius="20"
         Background="{StaticResource ContainerBackground}"
@@ -13,11 +13,26 @@
         BorderThickness="4" 
         >
         <StackPanel x:Name="ParentStackPanel">
-            <Label x:Name="CardTitle" Content="Nazwa Karty" FontWeight="Bold" HorizontalAlignment="Center" FontSize="25" Foreground="{StaticResource TextColor}"/>
+            <Label 
+                x:Name="CardTitle" 
+                Content="{Binding Title}" 
+                FontWeight="Bold" 
+                HorizontalAlignment="Center" 
+                FontSize="25" 
+                Foreground="{StaticResource TextColor}"
+                />
             <Line
                 X1="0" Y1="0" X2="{Binding ActualWidth, ElementName=ParentStackPanel}" Y2="0"
                 Stroke="Black" StrokeThickness="5"/>
-            <TextBlock x:Name="CardDescription"  TextWrapping="Wrap" Text="Lorem Ipsum Dolor Sit Amet Lorem Ipsum Dolor Sit Amet" Height="230" HorizontalAlignment="Center" Padding="10" Foreground="{StaticResource TextColor}"/>
+            <TextBlock 
+                x:Name="CardDescription"  
+                TextWrapping="Wrap" 
+                Text="{Binding Description}" 
+                Height="230" 
+                HorizontalAlignment="Center" 
+                Padding="10" 
+                Foreground="{StaticResource TextColor}"
+                />
             <Separator Height="10" Background="Transparent"></Separator>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Button 
@@ -27,17 +42,18 @@
                     Height="50" 
                     Background="{StaticResource ButtonBackground}"
                     Style="{StaticResource RoundedButton}"
-                    ></Button>
+                    Command="{Binding AcceptCommand}"
+                    />
                 <Separator Width="30" Background="Transparent"></Separator>
                 <Button 
-                        x:Name="CardDecline" 
-                        Content="Anuluj" 
-                        Width="120" 
-                        Height="50" 
-                        Background="{StaticResource ButtonBackground}"
-                        Style="{StaticResource RoundedButton}"
-                        >
-                </Button>
+                    x:Name="CardDecline" 
+                    Content="Anuluj" 
+                    Width="120" 
+                    Height="50" 
+                    Background="{StaticResource ButtonBackground}"
+                    Style="{StaticResource RoundedButton}"
+                    Command="{Binding DeclineCommand}"
+                    />
             </StackPanel>
         </StackPanel>
     </Border>

@@ -32,6 +32,17 @@ namespace Engine.models
             MineLevel = 0;  
         }
 
+        public int GetBuildingLevel(string buildingType)
+        {
+            return buildingType switch
+            {
+                "Hotel" => HotelLevel,
+                "Farm" => FarmLevel,
+                "Mine" => MineLevel,
+                _ => throw new ArgumentException("Invalid building type")
+            };
+        }
+
         public void UpgradeHotel()
         {
             ++HotelLevel;

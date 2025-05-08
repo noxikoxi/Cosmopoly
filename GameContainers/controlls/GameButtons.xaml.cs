@@ -22,6 +22,7 @@ namespace GameContainers.controlls
     {
         public event EventHandler Dice_Clicked;
         public event EventHandler Upgrade_Clicked;
+        public event EventHandler SkipTurn_Clicked;
         public GameButtons()
         {
             InitializeComponent();
@@ -33,6 +34,16 @@ namespace GameContainers.controlls
             set => DiceRolls.Content = value.ToString();
         }
 
+        public void DisableDiceButton()
+        {
+            RollDiceButton.IsEnabled = false;
+        }
+
+        public void EnableDiceButton()
+        {
+            RollDiceButton.IsEnabled = true;
+        }
+
         private void Dice_Click(object sender, RoutedEventArgs e)
         {
             Dice_Clicked?.Invoke(this, EventArgs.Empty);
@@ -41,6 +52,11 @@ namespace GameContainers.controlls
         private void Upgrade_Click(object sender, RoutedEventArgs e)
         {
             Upgrade_Clicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void SkipTurn_Click(object sender, RoutedEventArgs e)
+        {
+            SkipTurn_Clicked?.Invoke(this, EventArgs.Empty);
         }
     }
 }

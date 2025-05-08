@@ -20,9 +20,15 @@ namespace GameContainers.controlls
     /// </summary>
     public partial class EntityChooser : UserControl
     {
+        public event EventHandler Exit_Clicked;
         public EntityChooser()
         {
             InitializeComponent();
+        }
+
+        private void EntityChooser_Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Exit_Clicked?.Invoke(this, EventArgs.Empty);
         }
     }
 }

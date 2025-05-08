@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GameContainers.controlls"
              mc:Ignorable="d" 
-             d:DesignHeight="170" d:DesignWidth="300" Width="300">
+             d:DesignHeight="240" d:DesignWidth="300" Width="300">
     <Border
         CornerRadius="10"
         Background="{StaticResource ContainerBackground}"
@@ -37,6 +37,17 @@
                     Background="{StaticResource ButtonBackground}"
                     Style="{StaticResource RoundedButton}"
                     />
+            <Button 
+                x:Name="SkipTurn" 
+                Content="Pomiń Turę" 
+                Height="50" 
+                Margin="0,5,0,5"
+                Width="Auto"
+                Click="SkipTurn_Click"
+                Background="{StaticResource ButtonBackground}"
+                Style="{StaticResource RoundedButton}"
+                
+            />  
         </StackPanel>
     </Border>
 </UserControl>

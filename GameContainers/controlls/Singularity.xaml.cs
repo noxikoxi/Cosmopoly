@@ -24,6 +24,13 @@ namespace GameContainers.controlls
         {
             InitializeComponent();
         }
+
+        public Singularity(int width, int height)
+        {
+            InitializeComponent();
+            this.Width = width;
+            this.Height = height;
+        }
         public StackPanel GetShipsContainer()
         {
             return ShipsContainer;

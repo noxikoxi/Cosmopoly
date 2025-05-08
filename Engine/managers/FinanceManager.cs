@@ -124,7 +124,7 @@ namespace Engine.managers
 
         public long GetInitialPlayerCredits()
         {
-            return this.passiveBase * 3;
+            return this.passiveBase * 5;
         }
 
         public (int, int) GetPlanetarySystemUpgradeCosts(PlanetarySystem system)
@@ -155,6 +155,11 @@ namespace Engine.managers
         public long GetHousingCost(HabitablePlanet planet)
         {
             return costbyHotelLevel[planet.HotelLevel];
+        }
+
+        public long GetSettleCost()
+        {
+            return costbyHotelLevel[0];
         }
 
         private long GetPassiveByPlanet(HabitablePlanet planet)

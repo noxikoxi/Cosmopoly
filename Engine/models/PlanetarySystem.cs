@@ -33,6 +33,16 @@ namespace Engine.models
             ++MineLevel;
         }
 
+        public int GetBuildingLevel(string buildingType)
+        {
+            return buildingType switch
+            {
+                "Mine" => MineLevel,
+                "GalacticShipyard" => IsGalacticShipyardBuilt ? 1 : 0,
+                _ => throw new ArgumentException("Invalid building type")
+            };
+        }
+
 
         public void BuildGalacticShipyhard()
         {

@@ -52,7 +52,18 @@ namespace Engine.managers
             }
 
             return buildings;
+        }
 
+        public static string GetUpgradeEffect(string upgradeType)
+        {
+            if(upgradeType == "Hotel")
+            {
+                return "Zwiększa koszt przebywania na planecie";
+            }
+            else
+            {
+                return "Zwiększa pasywny przychód kredytów";
+            }
         }
     }
 }

@@ -64,6 +64,13 @@ namespace GameContainers.controlls
 
         }
 
+        public Planet(int width, int height)
+        {
+            InitializeComponent();
+            this.Width = width;
+            this.Height = height;
+        }
+
         public StackPanel GetShipsContainer()
         {
             return ShipsContainer;

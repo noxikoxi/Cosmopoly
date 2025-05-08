@@ -21,5 +21,10 @@
             SkippedTurns += 1;
         }
 
+        public void ResetSkippedTurns()
+        {
+            SkippedTurns = 0;
+        }   
+
     }
 }

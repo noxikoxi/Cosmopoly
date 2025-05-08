@@ -1,6 +1,6 @@
 {
     "finances": {
-        "passiveBase": 200,
+        "passiveBase": 500,
         "passiveGalacticShipyard": 1000,
         "passiveMine": [ 50, 120, 250],
         "passiveFarm": [ 50, 110, 220, 350, 450, 550],

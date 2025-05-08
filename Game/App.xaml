@@ -12,6 +12,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/GameContainers;component/styles/RoundedButton.xaml"/>
                 <ResourceDictionary Source="/GameContainers;component/styles/WelcomePageButton.xaml"/>
+                <ResourceDictionary Source="/GameContainers;component/styles/ExitButton.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

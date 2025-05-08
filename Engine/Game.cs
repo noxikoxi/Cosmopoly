@@ -1,4 +1,5 @@
-﻿using Engine.managers;
+﻿using System.Diagnostics;
+using Engine.managers;
 using Engine.models;
 using Engine.utils;
 
@@ -33,7 +34,7 @@ namespace Engine
             _currPlayer = 0;
 
             var cards = ConfigLoader.LoadCardConfig(Path.Combine(configFolderPath, "Cards.json"));
-            Console.WriteLine("\n[Cosmopoly Engine] Loaded Cards");
+            Debug.WriteLine("\n[Cosmopoly Engine] Loaded Cards");
 
             //foreach (var card in cards)
             //{
@@ -52,7 +53,7 @@ namespace Engine
                 throw new Exception("Unable to load galaxy config");
             }
 
-            Console.WriteLine("\n[Cosmopoly Engine] Loaded Galaxy");
+            Debug.WriteLine("\n[Cosmopoly Engine] Loaded Galaxy");
 
             foreach (SpaceEntity entity in Entities)
             {
@@ -73,7 +74,7 @@ namespace Engine
             }
 
             _fManager = manager;
-            Console.WriteLine("\n[Cosmopoly Engine] Loaded Finance Manager");
+            Debug.WriteLine("\n[Cosmopoly Engine] Loaded Finance Manager");
 
             upgradedPlanetsThisTurn = new();
             upgradedSystemThisTurn = new();
@@ -115,7 +116,7 @@ namespace Engine
 
         public bool IsPlayerInBankruptcy(Player player)
         {
-            return player.credits <= 0;
+            return player.credits < 0;
         }
 
         public Random GetRandom()
@@ -125,14 +126,10 @@ namespace Engine
 
         public void RemoveBankruptPlayer(Player player)
         {
-            if (IsPlayerInBankruptcy(player))
-            {
-                player.credits = 0;
-                player.BlockedTurns = 2;
-                player.position = 0;
-                player.cards.Clear();
-            }
-
+            player.credits = 0;
+            player.BlockedTurns = 2;
+            player.position = 0;
+            player.cards.Clear();
             foreach (SpaceEntity entity in Entities)
             {
                 if (entity is HabitablePlanet planet && planet.Owner == player)
@@ -166,14 +163,18 @@ namespace Engine
 
         public void NextPlayer()
         {
+            var player = GetCurrentPlayer();
+            if (player.SkippedTurns == 1)
+            {
+                player.ResetSkippedTurns();
+            }
             ++this._currPlayer;
             if (this._currPlayer >= _players_count)
             {
                 this.Turn++;
                 this._currPlayer %= _players_count;
             }
-            var player = GetCurrentPlayer();
-
+            player = GetCurrentPlayer();
             if (player.IsBankrupt)
             {
                 NextPlayer();
@@ -234,11 +235,74 @@ namespace Engine
 
         public void SkipPlayerTurn()
         {
-            if (this.players[this._currPlayer].SkippedTurns < 2)
+            if (CanSkipTurn())
             {
-                this.players[this._currPlayer].SkipTurn();
+                var player = this.players[this._currPlayer];
                 NextPlayer();
+                player.SkipTurn();
             }
+        }
+
+        public bool CanSkipTurn()
+        {
+            if (this.players[this._currPlayer].SkippedTurns == 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void SettlePlanet()
+        {
+            SpaceEntity currentEntity = this.Entities[GetCurrentPlayer().position];
+            if (currentEntity is HabitablePlanet planet)
+            {
+                if (planet.Owner != null)
+                {
+                    throw new Exception("Planet already owned");
+                }
+                var hotelCost = _fManager.GetSettleCost();
+                if (GetCurrentPlayer().credits < hotelCost)
+                {
+                    throw new Exception("Not enough credits");
+                }
+                planet.Owner = GetCurrentPlayer();
+                GetCurrentPlayer().credits -= hotelCost;
+                planet.UpgradeHotel();
+            }
+            else
+            {
+                throw new Exception("Current position is not habitable planet");
+            }
+        }
+
+        public bool CanPlayerSettle()
+        {
+            SpaceEntity currentEntity = this.Entities[GetCurrentPlayer().position];
+            if (currentEntity is HabitablePlanet planet)
+            {
+                if (planet.Owner != null)
+                {
+                    return false;
+                }
+                var hotelCost = _fManager.GetSettleCost();
+
+                if ( GetCurrentPlayer().credits < hotelCost)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public long GetHousingCost()
+        {
+            return _fManager.GetSettleCost();
         }
 
         public Player GetCurrentPlayer()
@@ -286,7 +350,7 @@ namespace Engine
         public Dictionary<string, int> GetPossibleSystemUpgrades(PlanetarySystem system)
         {
             // No more upgrades this turn
-            if (upgradedSystemThisTurn.ContainsKey(system) && upgradedSystemThisTurn[system] == false)
+            if (upgradedSystemThisTurn.ContainsKey(system) && upgradedSystemThisTurn[system] == true)
             {
                 return new Dictionary<string, int>();
             }
@@ -310,7 +374,7 @@ namespace Engine
 
         public Dictionary<string, int> GetPossiblePlanetUpgrades(HabitablePlanet planet)
         {
-            if (upgradedPlanetsThisTurn.ContainsKey(planet) && upgradedPlanetsThisTurn[planet] == false)
+            if (upgradedPlanetsThisTurn.ContainsKey(planet) && upgradedPlanetsThisTurn[planet] == true)
             {
                 return new Dictionary<string, int>();
             }
@@ -324,7 +388,6 @@ namespace Engine
             var isSystemOwned = OwnershipManager.IsOwnedByPlayer(GetCurrentPlayer(), Entities, planetSystem);
 
             List<string> buildings = UpgradeManager.GetPossiblePlanetUpgrades(planet, isSystemOwned);
-
             foreach (var building in buildings)
             {
                 if (building == "Hotel")
@@ -342,6 +405,11 @@ namespace Engine
             }
 
             return upgrades;
+        }
+
+        public string GetUpgradeEffect(string val)
+        {
+            return UpgradeManager.GetUpgradeEffect(val);
         }
 
         public void UpgradePlanet(HabitablePlanet planet, string building)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Engine.models
 {
-    class PiratePlanet(byte blockedTurns) : SpaceEntity("Planeta Piratów", false)
+    public class PiratePlanet(byte blockedTurns) : SpaceEntity("Planeta Piratów", false)
     {
         public byte BlockedTurns { set; get; } = blockedTurns;
 

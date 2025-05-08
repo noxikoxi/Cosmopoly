@@ -10,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.TextFormatting;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
@@ -23,6 +24,13 @@ namespace GameContainers.controlls
         public Pirates()
         {
             InitializeComponent();
+        }
+
+        public Pirates(int width, int height)
+        {
+            InitializeComponent();
+            this.Width = width;
+            this.Height = height;
         }
 
         public StackPanel GetShipsContainer()
