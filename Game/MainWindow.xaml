@@ -30,10 +30,10 @@
         <containers:PlanetarySystem x:Name="GalaxyInside" HorizontalAlignment="Center" VerticalAlignment="Center" RadiusX="0.4" RadiusY="0.30" PercentageSize="0.4"/>
 
         <Grid x:Name="PopupBG" Background="#7F000000" Visibility="Hidden">
-            <controlls:Card x:Name="Card" VerticalAlignment="Center" HorizontalAlignment="Center" Width="400" Visibility="Hidden"/>
+            <controlls:Card x:Name="Card" VerticalAlignment="Center" HorizontalAlignment="Center" Width="Auto" Height="Auto" Visibility="Hidden"/>
             <controlls:EntityChooser x:Name="EntityChooser" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden" Exit_Clicked="EntityChooser_Exit_Clicked" />
             <controlls:UpgradeChooser x:Name="UpgradeChooser" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden" Width="750" Exit_Clicked="UpgradeChooser_Exit_Clicked"/>
+            <controlls:StationChooser x:Name="StationChooser" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden" Width="Auto" Height="Auto"/>
         </Grid>
-        
     </Grid>
 </Window>

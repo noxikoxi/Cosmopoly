@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GameContainers.controlls"
              mc:Ignorable="d" 
-             d:DesignHeight="370" d:DesignWidth="400" Height="370">
+             d:DesignHeight="370" d:DesignWidth="400" MaxHeight="800" MaxWidth="600">
     <Border
         CornerRadius="20"
         Background="{StaticResource ContainerBackground}"
@@ -31,30 +31,30 @@
                 Height="230" 
                 HorizontalAlignment="Center" 
                 Padding="10" 
+                FontSize="22"
                 Foreground="{StaticResource TextColor}"
                 />
             <Separator Height="10" Background="Transparent"></Separator>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Button 
-                    x:Name="CardAccept" 
-                    Content="Zatwierdź" 
-                    Width="120" 
-                    Height="50" 
-                    Background="{StaticResource ButtonBackground}"
-                    Style="{StaticResource RoundedButton}"
-                    Command="{Binding AcceptCommand}"
-                    />
-                <Separator Width="30" Background="Transparent"></Separator>
-                <Button 
-                    x:Name="CardDecline" 
-                    Content="Anuluj" 
-                    Width="120" 
-                    Height="50" 
-                    Background="{StaticResource ButtonBackground}"
-                    Style="{StaticResource RoundedButton}"
-                    Command="{Binding DeclineCommand}"
-                    />
-            </StackPanel>
+            <ItemsControl ItemsSource="{Binding CardOptions}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button 
+                            Content="{Binding Label}"
+                            Command="{Binding Command}"
+                            Width="120"
+                            Height="50"
+                            Background="{StaticResource ButtonBackground}"
+                            Style="{StaticResource RoundedButton}"
+                            Margin="10,0"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Separator Height="30" Background="Transparent"></Separator>
         </StackPanel>
     </Border>
 </UserControl>

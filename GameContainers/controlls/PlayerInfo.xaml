@@ -14,14 +14,14 @@
     BorderThickness="2"
     >
         <StackPanel Orientation="Vertical">
-            <Label x:Name="PlayerName" Content="Gracz 1" FontWeight="Bold" Foreground="{StaticResource TextColor}" FontSize="24"/>
+            <Label x:Name="PlayerName" Content="{Binding Name}" FontWeight="Bold" Foreground="{StaticResource TextColor}" FontSize="24"/>
             <StackPanel Orientation="Horizontal">
                 <Label FontSize="24" Content="Kredyty:" FontWeight="Bold" Foreground="{StaticResource TextColor}"/>
-                <Label FontSize="24" x:Name="Credits" Content="100" Foreground="{StaticResource TextColor}"/>
+                <Label FontSize="24" x:Name="Credits" Content="{Binding Credits}" Foreground="{StaticResource TextColor}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label FontSize="15" Content="Ochrona przed atakiem piratów:" FontStyle="Italic" Foreground="{StaticResource TextColor}"/>
-                <Label FontSize="15" x:Name="PirateCards" Content="1" Foreground="{StaticResource TextColor}"/>
+                <Label FontSize="15" x:Name="PirateCards" Content="{Binding ShieldCards}" Foreground="{StaticResource TextColor}"/>
             </StackPanel>
         </StackPanel>
     </Border>

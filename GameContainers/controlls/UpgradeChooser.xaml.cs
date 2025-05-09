@@ -28,6 +28,6 @@ namespace GameContainers.controlls
         private void UpgradeChooser_Exit_Click(object sender, RoutedEventArgs e)
         {
             Exit_Clicked?.Invoke(this, EventArgs.Empty);
-         }
+        }
     }
 }

@@ -26,8 +26,6 @@ namespace Game.ViewModels
     {
         public ObservableCollection<Upgrade> Upgrades { get; set; }
 
-
-
         public UpgradeChooserVM()
         {
             Upgrades = new();

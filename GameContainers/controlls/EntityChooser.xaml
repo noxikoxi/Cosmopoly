@@ -30,7 +30,7 @@
             <ItemsControl ItemsSource="{Binding Entities}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel  Orientation="Horizontal"/>
+                        <WrapPanel x:Name="Content"  Orientation="Horizontal"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 

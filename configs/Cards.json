@@ -2,16 +2,21 @@
     "cards": [
         {
             "title": "Atak piratów",
-            "description": "Zostałeś zaatakowany przez piratów. Jeżeli nie zapłacisz okupu stracisz 2 kolejki.",
+            "description": "Zostałeś zaatakowany przez piratów.\nJeżeli nie zapłacisz 800 kredytów okupu stracisz 2 kolejki.",
             "strategies": [
+                {
+                    "type": "TakeCredits",
+                    "value": 800
+                },
                 {
                     "type": "BlockTurn",
                     "value": 2.0
                 },
                 {
-                    "type": "TakeCredits",
-                    "value": 800
+                    "type": "UseShield",
+                    "value": 0.0
                 }
+                
             ],
             "applyTogether": false
         },
@@ -28,14 +33,18 @@
         },
         {
             "title": "Bilet galaktyczny",
-            "description": "Możesz przenieść się do dowolnej stacji kolei galaktycznych.",
+            "description": "Możesz przenieść się do dowolnej stacji kolei galaktycznych.\n",
             "strategies": [
                 {
                     "type": "Move",
                     "value": 0.0
+                },
+                {
+                    "type": "Cancel",
+                    "value": 0.0
                 }
             ],
-            "applyTogether": true
+            "applyTogether": false
         },
         {
             "title": "Podatek od nieruchomości",
@@ -77,15 +86,15 @@
         },
         {
             "title": "Awaria w stoczni galaktycznej",
-            "description": "Twoja stocznia galaktyczna uległa awarii, dalsza produkcja jest niemożliwa.\nJeżeli nie zapłacisz za jej naprawę, stocznia zostanie usunięta. Koszt naprawy wynosi 800 kredytów.",
+            "description": "Twoja stocznia galaktyczna uległa awarii, dalsza produkcja jest niemożliwa.\nJeżeli nie zapłacisz za jej naprawę, stocznia zostanie usunięta.\nKoszt naprawy wynosi 800 kredytów.",
             "strategies": [
-                {
-                    "type": "Destroy",
-                    "value": 0.0
-                },
                 {
                     "type": "TakeCredits",
                     "value": 800.0
+                },
+                {
+                    "type": "Destroy",
+                    "value": 0.0
                 }
             ],
             "applyTogether": false

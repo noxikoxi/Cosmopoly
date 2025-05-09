@@ -1,25 +1,18 @@
 ﻿using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Game.ViewModels;
 using GameContainers;
-using System.IO;
 using GameContainers.controlls;
 using GameContainers.containers;
 using GameContainers.converters;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using Game.utils;
 using Engine.models;
-using System.Numerics;
-using System.Diagnostics;
+using Engine.strategies;
+
 
 namespace Game
 {
@@ -28,8 +21,6 @@ namespace Game
         Engine.Game game;
         List<IPlanetControl> galaxyEntities;
         List<Image> playerShips;
-
-        CardVM cardVm;
 
         const int PLANET_WIDTH = 150;
         const int PLANET_HEIGHT = 100;
@@ -130,13 +121,19 @@ namespace Game
                     {
                         GalaxyInside.Children.Add((UIElement)entity);
                         galaxyEntities.Add(entity);
+
+                        if(entity is GameContainers.controlls.Station station)
+                        {
+                            station.StationName = model.Name;
+                        }
                     }
                     idx++;
                 }
             }
 
             game.SetInitialCredits();
-            SetInfo();
+            // Bindowanie Danych Gracza
+            PlayerInfo.DataContext = game.CurrentPlayer;
 
             // ships images
             for (int i = 0; i < players.Length; i++)
@@ -148,33 +145,45 @@ namespace Game
             this.SizeChanged += (s, e) => CanvasWriter.DrawArrows(galaxyEntities, ArrowCanvas);
         }
 
-        private void SetInfo()
+        private void SetInfoAndNextPlayer()
         {
-            PlayerInfo.PlayerNameText = game.GetCurrentPlayer().Name;
-            PlayerInfo.CreditsAmount = game.GetCurrentPlayer().credits;
-            PlayerInfo.PirateCardCount = game.GetCurrentPlayerPirateCards();
+            game.NextPlayer();
+            PlayerInfo.DataContext = game.CurrentPlayer;
         }
 
-        private async Task MoveShipsWithDelay(int rolled)
+        private async Task MoveShipWithDelay(int rolled)
         {
+            var currentPlayerIndex = game.GetCurrentPlayerIndex();
             for (int i = 0; i < rolled; i++)
             {
-                var currentPlayerPosition = game.GetCurrentPlayer().position;
-                var currentPlayerIndex = game.GetCurrentPlayerIndex();
-                var currentPlanetContainer = galaxyEntities[currentPlayerPosition].GetShipsContainer();
+                var currentPlanetContainer = galaxyEntities[game.CurrentPlayer.position].GetShipsContainer();
                 var shipToMove = playerShips[currentPlayerIndex];
 
                 // Usuń statek z bieżącej planety
                 currentPlanetContainer.Children.Remove(shipToMove);
 
                 // Przesuń gracza (logika)
-                game.MovePlayerByPoints(1);
+                game.MovePlayerByPoint();
 
                 // Dodaj statek do nowej planety
-                galaxyEntities[game.GetCurrentPlayer().position].GetShipsContainer().Children.Add(shipToMove);
+                galaxyEntities[game.CurrentPlayer.position].GetShipsContainer().Children.Add(shipToMove);
 
                 // Czekaj bez blokowania UI
                 await Task.Delay(200);
+            }
+        }
+
+        private async Task MoveShipWithDelayUntil(int position)
+        {
+            var currentPlayerIndex = game.GetCurrentPlayerIndex();
+            while (game.CurrentPlayer.position != position)
+            {
+                var currentPlanetContainer = galaxyEntities[game.CurrentPlayer.position].GetShipsContainer();
+                var shipToMove = playerShips[currentPlayerIndex];
+                currentPlanetContainer.Children.Remove(shipToMove);
+                game.MovePlayerByPoint();
+                galaxyEntities[game.CurrentPlayer.position].GetShipsContainer().Children.Add(shipToMove);
+                await Task.Delay(50);
             }
         }
 
@@ -187,28 +196,34 @@ namespace Game
             var cardViewModel = new CardVM
             {
                 Title = $"Zasiedlenie planety",
-                Description = $"Czy chcesz wysłać osadników na planetę {planet.Name}?\nKoszt {game.GetHousingCost()}",
-                OnAccept = (o) => {
+                Description = $"Czy chcesz wysłać osadników na planetę {planet.Name} i wybudować port kosmiczny?\nKoszt {game.GetHousingCost()}",
+            };
+
+            cardViewModel.AddOption(
+                label: "Zasiedl planetę",
+                action: (o) =>
+                {
                     PopupBG.Visibility = Visibility.Hidden;
                     Card.Visibility = Visibility.Hidden;
                     game.SettlePlanet();
                     // Owner label change
-                    Planet pl = (Planet)galaxyEntities[game.GetCurrentPlayer().position];
-                    pl.PlanetOwner = game.GetCurrentPlayer().Name;
-                    game.NextPlayer();
-                    SetInfo();
+                    Planet pl = (Planet)galaxyEntities[game.CurrentPlayer.position];
+                    pl.PlanetOwner = game.CurrentPlayer.Name;
+                    SetInfoAndNextPlayer();
                 },
-                OnDecline = (o) => {
+                canExecute: (o) => canAfford
+            );
+            cardViewModel.AddOption(
+                label: "Anuluj",
+                action: (o) =>
+                {
                     PopupBG.Visibility = Visibility.Hidden;
                     Card.Visibility = Visibility.Hidden;
-                    game.NextPlayer();
-                    SetInfo();
+                    SetInfoAndNextPlayer();
                 },
-                CanAccept = (o) => canAfford
-            };
-
+                canExecute: (o) => true
+            );
             Card.DataContext = cardViewModel;
-            SetInfo();
         }
 
         private async void GameButtons_Dice_Clicked(object sender, EventArgs e)
@@ -217,20 +232,200 @@ namespace Game
             var rolled = game.RollDice();
             GameButtons.DiceRollsCount = rolled;
 
-            await MoveShipsWithDelay(rolled);
+            await MoveShipWithDelay(rolled);
 
             var currentSpaceEntity = game.GetCurrentPlayerPositionEntity();
 
-            if (currentSpaceEntity is Engine.models.HabitablePlanet planet && planet.Owner == null && game.CanPlayerSettle())
+            if (currentSpaceEntity is HabitablePlanet planet && planet.Owner == null && game.CanPlayerSettle())
             {
                 ShowPlanetSettlement(planet);
             }
+            else if (currentSpaceEntity is HabitablePlanet planet2 && planet2.Owner != null && planet2.Owner != game.CurrentPlayer)
+            {
+                PopupBG.Visibility = Visibility.Visible;
+                Card.Visibility = Visibility.Visible;
+                var cost = game.GetCurrentPositionHousingCost();
+                var cardViewModel = new CardVM
+                {
+                    Title = $"Pobyt w hotelu",
+                    Description = $"Musisz nocować na planecie {planet2.Name}.\nKoszt hotelu wynosi {cost}."
+                };
+                cardViewModel.AddOption(
+                    label: "Zapłać", 
+                    action: (o) => HandleHousing(cost),
+                    canExecute: (o) => true
+                );
+                Card.DataContext = cardViewModel;
+            }else if (currentSpaceEntity is Engine.models.Singularity || currentSpaceEntity is PiratePlanet)
+            {
+                Engine.models.Card card;
+                if (currentSpaceEntity is Engine.models.Singularity)
+                {
+                    card = game.GetCardFromSingularity();
+                }
+                else
+                {
+                    card = game.GetPirateCard();
+                }
+                PopupBG.Visibility = Visibility.Visible;
+                Card.Visibility = Visibility.Visible;
+
+                string desc = card.Description;
+                if (card.Title == "Podatek od nieruchomości")
+                {
+                    desc += $"\nKoszt {game.GetCurrentPlayerPropertyTax(card.strategies[0].Value)}";
+
+                }
+                var cardViewModel = new CardVM
+                {
+                    Title = card.Title,
+                    Description = desc,
+                };
+                var len = card.strategies.Count();
+                if ( card.ApplyTogether)
+                {
+                    len = 1; // I tak nie ma opcji do wyboru
+                }
+                for (int i = 0; i < len; i++)
+                {
+                    var strategy = card.strategies[i];
+                    AddCardStrategyOption(strategy, cardViewModel, i, card);
+                }
+                Card.DataContext = cardViewModel;
+            }
             else
             {
-                game.NextPlayer();
-                SetInfo();
+                SetInfoAndNextPlayer();
             }
             GameButtons.EnableDiceButton();
+        }
+
+        private void AddCardStrategyOption(CardStrategy strategy, CardVM viewModel, int i, Engine.models.Card card)
+        {
+            viewModel.AddOption(
+            label: Engine.utils.StrategyNameConverter.ConvertName(strategy.Type),
+            action: (o) =>
+            {
+                PopupBG.Visibility = Visibility.Hidden;
+                Card.Visibility = Visibility.Hidden;
+                if (strategy.Type == strategyType.Move)
+                {
+                    HandleMoveCard(card);
+                }else if (strategy.Type == strategyType.Cancel)
+                {
+                    PopupBG.Visibility = Visibility.Hidden;
+                    Card.Visibility = Visibility.Hidden;
+                    SetInfoAndNextPlayer();
+                }
+                else
+                {
+                    game.ApplyCard(card, i);
+                    if (strategy.Type == strategyType.TakeCredits && game.IsPlayerInBankruptcy(game.CurrentPlayer))
+                    {
+                        ShowBancruptyMessage();
+                    }
+                    else
+                    {
+                        SetInfoAndNextPlayer();
+                    }
+                }
+               
+            },
+                canExecute: (o) =>
+                {
+                    if (strategy.Type == strategyType.TakeCredits)
+                    {
+                        return game.CurrentPlayer.Credits >= card.strategies[0].Value;
+                    }
+                    else if (strategy.Type == strategyType.UseShield)
+                    {
+                        return game.CurrentPlayer.ShieldCards > 0;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+            );
+
+        }
+
+        private void HandleMoveCard(Engine.models.Card card)
+        { 
+            PopupBG.Visibility = Visibility.Visible;
+            StationChooser.Visibility = Visibility.Visible;
+            StationChooserVM stationChooser = new StationChooserVM();
+            foreach (KeyValuePair<Engine.models.Station, int> station in game.GetStationWithIdx())
+            {
+
+                stationChooser.AddStation(
+                    name: station.Key.Name,
+                    action: async (o) =>
+                    {
+                        StationChooser.Visibility = Visibility.Hidden;
+                        PopupBG.Visibility = Visibility.Hidden;
+                        await MoveShipWithDelayUntil(station.Value);
+                        SetInfoAndNextPlayer();
+                    });
+            }
+            stationChooser.AddStation(
+                name: "Pozostań na swoim miejscu",
+                action: (o) =>
+                {
+                    StationChooser.Visibility = Visibility.Hidden;
+                    PopupBG.Visibility = Visibility.Hidden;
+                    SetInfoAndNextPlayer();
+                });
+            StationChooser.DataContext = stationChooser;
+            
+        }
+
+        private void HandleHousing(long cost)
+        {
+            PopupBG.Visibility = Visibility.Hidden;
+            Card.Visibility = Visibility.Hidden;
+            game.RemoveCredits(game.CurrentPlayer, cost);
+            if (game.IsPlayerInBankruptcy(game.CurrentPlayer))
+            {
+                ShowBancruptyMessage();
+            }
+            else
+            {
+                SetInfoAndNextPlayer();
+            }
+        }
+
+        private void HandleAccepteBacruptyMessage()
+        {
+            PopupBG.Visibility = Visibility.Hidden;
+            Card.Visibility = Visibility.Hidden;
+            game.RemoveBankruptPlayer(game.CurrentPlayer);
+            foreach (var entity in galaxyEntities)
+            {
+                if (entity is Planet planet && planet.PlanetOwner == game.CurrentPlayer.Name)
+                {
+                    planet.PlanetOwner = "Niezamieszkana";
+                }
+
+            }
+            SetInfoAndNextPlayer();
+        }
+
+        private void ShowBancruptyMessage()
+        {
+            PopupBG.Visibility = Visibility.Visible;
+            Card.Visibility = Visibility.Visible;
+            var cardViewModel = new CardVM
+            {
+                Title = $"Bankructwo",
+                Description = $"Nie masz wystarczającej ilości kredytów, aby opłacić hotel.\nZbankrutowałeś."
+            };
+            cardViewModel.AddOption(
+                label: "Akceptuj",
+                canExecute: (o) => true,
+                action: (o) => HandleAccepteBacruptyMessage()
+                );
+            Card.DataContext = cardViewModel;
         }
 
         private void GameButtons_Upgrade_Clicked(object sender, EventArgs e)
@@ -269,11 +464,10 @@ namespace Game
         {
             UpgradeChooser.Visibility = Visibility.Visible;
             UpgradeChooserVM upgradeChooser = new UpgradeChooserVM();
-            // Dictionary<string, int>
             foreach (KeyValuePair<string, int> pair in game.GetPossiblePlanetUpgrades(planet))
             {
                 upgradeChooser.AddUpgrade(
-                    name: UpgradesNames.ConvertName(pair.Key),
+                    name: UpgradesNames.ConvertName(pair.Key, planet.GetBuildingLevel(pair.Key)),
                     level: planet.GetBuildingLevel(pair.Key),
                     price: pair.Value,
                     effect: game.GetUpgradeEffect(pair.Key),
@@ -284,7 +478,7 @@ namespace Game
 
                         game.UpgradePlanet(planet, pair.Key);
                     },
-                    canUpgrade: (o) => game.GetCurrentPlayer().credits >= pair.Value
+                    canUpgrade: (o) => game.CurrentPlayer.Credits >= pair.Value
                     );
                 
             }
@@ -299,7 +493,7 @@ namespace Game
             foreach (KeyValuePair<string, int> pair in game.GetPossibleSystemUpgrades(system))
             {
                 upgradeChooser.AddUpgrade(
-                    name: UpgradesNames.ConvertName(pair.Key),
+                    name: UpgradesNames.ConvertName(pair.Key, system.GetBuildingLevel(pair.Key)),
                     level: system.GetBuildingLevel(pair.Key),
                     price: pair.Value,
                     effect: game.GetUpgradeEffect(pair.Key),
@@ -310,7 +504,7 @@ namespace Game
 
                         game.UpgradeSystem(system, pair.Key);
                     },
-                    canUpgrade: (o) => game.GetCurrentPlayer().credits >= pair.Value
+                    canUpgrade: (o) => game.CurrentPlayer.Credits >= pair.Value
                     );
             }
             UpgradeChooser.DataContext = upgradeChooser;
@@ -321,7 +515,6 @@ namespace Game
             if (game.CanSkipTurn())
             {
                 game.SkipPlayerTurn();
-                SetInfo();
             }
             else
             {
@@ -337,8 +530,8 @@ namespace Game
 
         private void UpgradeChooser_Exit_Clicked(object sender, EventArgs e)
         {
-            PopupBG.Visibility = Visibility.Hidden;
             UpgradeChooser.Visibility = Visibility.Hidden;
+            EntityChooser.Visibility = Visibility.Visible;
 
         }
     }

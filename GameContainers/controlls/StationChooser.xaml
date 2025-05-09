@@ -5,41 +5,65 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GameContainers.controlls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="700">
-    <Border
+             d:DesignHeight="450" d:DesignWidth="800" MinHeight="400" MinWidth="400" Width="800" MaxWidth="800">
+    <Border x:Name="ParentBorder"
         CornerRadius="10"
         Background="{StaticResource ContainerBackground}"
         BorderBrush="Black"
         BorderThickness="3"
         >
         <StackPanel x:Name="ParentStackPanel">
-            <Label x:Name="Title" Content="Wybierz stację na którą chcesz się przetransportować" FontWeight="Bold" HorizontalAlignment="Center" FontSize="25" Foreground="{StaticResource TextColor}"/>
+            <StackPanel Orientation="Horizontal">
+                <Label x:Name="Title" Content="Wybierz stację na którą chcesz się przetransportować" FontWeight="Bold" HorizontalAlignment="Center" FontSize="25" Foreground="{StaticResource TextColor}"/>
+                <Button x:Name="Hide" 
+                    Content="Schowaj" 
+                    Width="70" 
+                    Height="30"
+                    Background="Transparent"
+                    Style="{StaticResource ExitButton}" Click="Hide_Click"
+                    HorizontalAlignment="Right"
+                    Margin="10,0"
+                />
+            </StackPanel>
             <Line
         X1="0" Y1="0" X2="{Binding ActualWidth, ElementName=ParentStackPanel}" Y2="0"
         Stroke="Black" StrokeThickness="5"/>
-            <ItemsControl ItemsSource="{Binding Stations}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel  Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
+            <Grid x:Name="StationsContainer">
+                <ItemsControl ItemsSource="{Binding Stations}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="{Binding StationCount}" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
 
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Margin="5" Orientation="Vertical" HorizontalAlignment="Center">
-                            <Label Content="{Binding Name}" HorizontalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource TextColor}"/>
-                            <Button 
-                                Content="Stacja" 
-                                Width="80" 
-                                Height="80" 
-                                Background="Khaki"
-                                Tag="40"
-                                Style="{StaticResource RoundedButton}"
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="5" Orientation="Vertical" HorizontalAlignment="Center">
+                                <TextBlock 
+                                    TextWrapping="Wrap"
+                                    TextAlignment="Center"
+                                    Text="{Binding Name}" 
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontWeight="Bold" 
+                                    Foreground="{StaticResource TextColor}"
+                                    Height="80"
+                                    />
+                                <Button 
+                                    Content="Stacja" 
+                                    Width="80" 
+                                    Height="80" 
+                                    Background="#FF4E5F22"
+                                    Command="{Binding Move}"  
+                                    CommandParameter="{Binding}"
+                                    Style="{StaticResource RoundedButton}"
+                                    
                                 />
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
         </StackPanel>
     </Border>
 </UserControl>

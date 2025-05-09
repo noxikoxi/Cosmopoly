@@ -42,14 +42,21 @@
                                 <Label Content="{Binding Level}" HorizontalAlignment="Center" FontWeight="Normal" Foreground="{StaticResource TextColor}"/>
                             </StackPanel>
                             <Button 
-                                Content="{Binding Name}" 
                                 Width="80" 
                                 Height="80" 
                                 Background="Moccasin"
                                 Command="{Binding UpgradeBuilding}"  
                                 CommandParameter="{Binding}" 
                                 Style="{StaticResource RoundedButton}"
-                                />
+                            >
+                                <TextBlock 
+                                    Text="{Binding Name}" 
+                                    TextWrapping="Wrap"
+                                    TextAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                />          
+                            </Button>
                             <Label Content="{Binding Effect}" HorizontalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource TextColor}"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Label HorizontalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource TextColor}" Content="Koszt"/>

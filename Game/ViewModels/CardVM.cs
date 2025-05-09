@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -10,8 +11,17 @@ using Game.utils;
 
 namespace Game.ViewModels
 {
+    public class CardOption
+    {
+        public string Label { get; set; }
+        public ICommand Command { get; set; }
+    }
+
     public class CardVM : INotifyPropertyChanged
     {
+
+        public ObservableCollection<CardOption> CardOptions { get; }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private string _title;
@@ -39,37 +49,24 @@ namespace Game.ViewModels
         public ICommand AcceptCommand { get; }
         public ICommand DeclineCommand { get; }
 
-        public Action<object> OnAccept { get; set; }
-        public Action<object> OnDecline { get; set; }
-
-        public Predicate<object> CanAccept { get; set; }
+        public void AddOption(string label, Action<object> action, Predicate<object> canExecute)
+        {
+            CardOptions.Add(new CardOption
+            {
+                Label = label,
+                Command = new RelayCommand(action, canExecute)
+            });
+        }
 
         public CardVM()
         {
+            CardOptions = new();
             Title = "Tytuł";
             Description = "Opis";
-            AcceptCommand = new RelayCommand(ExecuteAccept, CanAcceptExecute);
-            DeclineCommand = new RelayCommand(ExecuteDecline);
         }
-
-        private void ExecuteAccept(object parameter)
-        {
-            OnAccept?.Invoke(parameter); // Wywołaj przekazaną akcję
-        }
-
-        private void ExecuteDecline(object parameter)
-        {
-            OnDecline?.Invoke(parameter); // Wywołaj przekazaną akcję
-        }
-
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private bool CanAcceptExecute(object parameter)
-        {
-            return CanAccept == null || CanAccept(parameter);
         }
     }
 }

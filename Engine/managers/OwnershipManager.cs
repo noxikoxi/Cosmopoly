@@ -81,9 +81,9 @@ namespace Engine.managers
 
         }
 
-        public static Dictionary<SpaceEntity, int> GetStationWithIdx(List<SpaceEntity> entities)
+        public static Dictionary<Station, int> GetStationWithIdx(List<SpaceEntity> entities)
         {
-            Dictionary<SpaceEntity, int> stationsWithIdx = [];
+            Dictionary<Station, int> stationsWithIdx = [];
             for (var i = 0; i < entities.Count; ++i)
             {
                 if (entities[i] is Station station)

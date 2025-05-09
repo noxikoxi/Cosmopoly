@@ -11,7 +11,9 @@ namespace Engine.strategies
         Move,
         BlockTurn,
         Shield,
-        Destroy
+        Destroy,
+        UseShield,
+        Cancel
     }
 
     public class CardStrategy
@@ -40,6 +42,7 @@ namespace Engine.strategies
                 "GiveCredits" => strategyType.GiveCredits,
                 "TakeCredits" => strategyType.TakeCredits,
                 "Move" => strategyType.Move,
+                "UseShield" => strategyType.UseShield,
                 "BlockTurn" => strategyType.BlockTurn,
                 "Shield" => strategyType.Shield,
                 "Destroy" => strategyType.Destroy,
@@ -57,10 +60,10 @@ namespace Engine.strategies
             switch (this.Type)
             {
                 case strategyType.GiveCredits:
-                    game.AddCredits(game.GetCurrentPlayer(), (long)this.Value);
+                    game.AddCredits(game.CurrentPlayer, (long)this.Value);
                     break;
                 case strategyType.TakeCredits:
-                    Player pl = game.GetCurrentPlayer();
+                    Player pl = game.CurrentPlayer;
                     if (this.Value < 1)
                     {
                         game.RemoveCredits(pl, game.GetCurrentPlayerPropertyTax(this.Value));
@@ -73,8 +76,13 @@ namespace Engine.strategies
                 case strategyType.BlockTurn:
                     game.BlockPlayer((int)this.Value);
                     break;
+                case strategyType.UseShield:
+                    game.CurrentPlayer.ShieldCards -= 1;
+                    break;
+                case strategyType.Cancel:
+                    break;
                 case strategyType.Destroy:
-                    List<PlanetarySystem> systems = OwnershipManager.GetPlayerSystems(game.PlanetarySystems, game.Entities, game.GetCurrentPlayer());
+                    List<PlanetarySystem> systems = OwnershipManager.GetPlayerSystems(game.PlanetarySystems, game.Entities, game.CurrentPlayer);
                     var rnd = game.GetRandom().Next(0, systems.Count);
                     systems[rnd].DestroyGalacticShipyard();
                     break;

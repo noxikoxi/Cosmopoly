@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using Engine.managers;
 using Engine.models;
 using Engine.utils;
@@ -11,7 +13,9 @@ namespace Engine
 
         public int Turn { get; private set; }
 
-        private int _currPlayer;
+        public Player CurrentPlayer { get; private set; }
+
+        private int _currPlayerIndex;
 
         private Random _random = new Random();
 
@@ -27,24 +31,26 @@ namespace Engine
         public List<SpaceEntity> Entities { get; private set; }
         public List<PlanetarySystem> PlanetarySystems { get; private set; }
 
+        private Card _pirateCard;
+
         public Game(Player[] players, string configFolderPath)
         {
             this.players = players;
             Turn = 0;
-            _currPlayer = 0;
+            _currPlayerIndex = 0;
+            CurrentPlayer = players[_currPlayerIndex];
 
             var cards = ConfigLoader.LoadCardConfig(Path.Combine(configFolderPath, "Cards.json"));
+            // Zawsze będzie
+            foreach (var card in cards)
+            {
+                if (card.Title == "Atak piratów")
+                {
+                    _pirateCard = card;
+                    break;
+                }
+            }
             Debug.WriteLine("\n[Cosmopoly Engine] Loaded Cards");
-
-            //foreach (var card in cards)
-            //{
-            //    Console.WriteLine(card);
-            //    foreach (var strategy in card.strategies)
-            //    {
-            //        Console.WriteLine(strategy);
-            //    }
-            //    Console.WriteLine("");
-            //}
 
             (Entities, PlanetarySystems) = ConfigLoader.LoadGalaxyConfig(Path.Combine(configFolderPath, "Galaxy.json"));
 
@@ -87,17 +93,19 @@ namespace Engine
 
         public void AddCredits(Player player, long credits)
         {
-            player.credits += credits;
+            player.Credits += credits;
         }
+
+
 
         public bool TransferCredits(Player from, Player to, long credits)
         {
-            if (from.credits < credits)
+            if (from.Credits < credits)
             {
                 return false;
             }
-            from.credits -= credits;
-            to.credits += credits;
+            from.Credits -= credits;
+            to.Credits += credits;
             return true;
         }
 
@@ -105,18 +113,18 @@ namespace Engine
         {
             foreach (var player in this.players)
             {
-                player.credits = _fManager.GetInitialPlayerCredits();
+                player.Credits = _fManager.GetInitialPlayerCredits();
             }
         }
 
         public void RemoveCredits(Player player, long credits)
         {
-            player.credits -= credits;
+            player.Credits -= credits;
         }
 
         public bool IsPlayerInBankruptcy(Player player)
         {
-            return player.credits < 0;
+            return player.Credits < 0;
         }
 
         public Random GetRandom()
@@ -126,10 +134,10 @@ namespace Engine
 
         public void RemoveBankruptPlayer(Player player)
         {
-            player.credits = 0;
+            player.Credits = 0;
             player.BlockedTurns = 2;
             player.position = 0;
-            player.cards.Clear();
+            player.ShieldCards = 0;
             foreach (SpaceEntity entity in Entities)
             {
                 if (entity is HabitablePlanet planet && planet.Owner == player)
@@ -143,7 +151,7 @@ namespace Engine
 
         public long GetCurrentPositionHousingCost()
         {
-            if (Entities[GetCurrentPlayer().position] is HabitablePlanet planet)
+            if (Entities[CurrentPlayer.position] is HabitablePlanet planet)
             {
                 return _fManager.GetHousingCost(planet);
             }
@@ -151,37 +159,36 @@ namespace Engine
             return 0;
         }
 
-        public Dictionary<SpaceEntity, int> GetStationWithIdx()
+        public Dictionary<Station, int> GetStationWithIdx()
         {
             return OwnershipManager.GetStationWithIdx(Entities);
         }
 
         public long GetCurrentPlayerPropertyTax(double taxPercentage)
         {
-            return _fManager.GetPropertyTax(GetCurrentPlayer(), Entities, taxPercentage);
+            return _fManager.GetPropertyTax(CurrentPlayer, Entities, taxPercentage);
         }
 
         public void NextPlayer()
         {
-            var player = GetCurrentPlayer();
-            if (player.SkippedTurns == 1)
+            if (CurrentPlayer.SkippedTurns == 1)
             {
-                player.ResetSkippedTurns();
+                CurrentPlayer.ResetSkippedTurns();
             }
-            ++this._currPlayer;
-            if (this._currPlayer >= _players_count)
+            ++this._currPlayerIndex;
+            if (this._currPlayerIndex >= _players_count)
             {
                 this.Turn++;
-                this._currPlayer %= _players_count;
+                this._currPlayerIndex %= _players_count;
             }
-            player = GetCurrentPlayer();
-            if (player.IsBankrupt)
+            CurrentPlayer = this.players[this._currPlayerIndex];
+            if (CurrentPlayer.IsBankrupt)
             {
                 NextPlayer();
             }
-            else if (player.BlockedTurns > 0)
+            else if (CurrentPlayer.BlockedTurns > 0)
             {
-                player.BlockedTurns--;
+                CurrentPlayer.BlockedTurns--;
                 NextPlayer();
             }
             ResetPlayerUpgradesThisTurn();
@@ -193,12 +200,12 @@ namespace Engine
             return diceRoll;
         }
 
-        public void MovePlayerToPostion(int newPosition)
+        public void MovePlayerToPosition(int newPosition)
         {
 
             if (newPosition >= 0 && newPosition < _total_entities)
             {
-                this.players[this._currPlayer].position = newPosition;
+                CurrentPlayer.position = newPosition;
             }
             else
             {
@@ -206,38 +213,55 @@ namespace Engine
             }
         }
 
-        public int MovePlayerByPoints(int points)
+        public int MovePlayerByPoint()
         {
-            int newPostion = (this.players[this._currPlayer].position + points) % _total_entities;
-            this.players[this._currPlayer].position = newPostion;
+            var pl = CurrentPlayer;
+            int newPostion = (pl.position + 1) % _total_entities;
+            pl.position = newPostion;
+
+            if (newPostion == 0){
+                AddCredits(pl, GetPlayerPassiveIncome(pl));
+            }
 
             return newPostion;
         }
 
         public SpaceEntity GetCurrentPlayerPositionEntity()
         {
-            return this.Entities[GetCurrentPlayer().position];
+            return this.Entities[CurrentPlayer.position];
         }
 
         public Card GetCardFromSingularity()
         {
-            if (this.Entities[GetCurrentPlayer().position].GetType() != typeof(Singularity))
+            var pl = CurrentPlayer;
+            if (this.Entities[pl.position] is Singularity singualairty)
+            {
+                var card = singualairty.GetRandomCard(
+                    OwnershipManager.GetPlayerSystemGalacticShipyards(
+                        CurrentPlayer,
+                        Entities,
+                        PlanetarySystems
+                        ),
+                    _random);
+                return card;
+            }
+            else
             {
                 throw new Exception("Current position is not Singularity");
             }
-            return ((Singularity)this.Entities[GetCurrentPlayer().position]).GetRandomCard(PlanetarySystems, _random);
+     
         }
 
         public void BlockPlayer(int turns)
         {
-            GetCurrentPlayer().BlockedTurns += turns;
+            CurrentPlayer.BlockedTurns += turns;
         }
 
         public void SkipPlayerTurn()
         {
             if (CanSkipTurn())
             {
-                var player = this.players[this._currPlayer];
+                var player = this.players[this._currPlayerIndex];
                 NextPlayer();
                 player.SkipTurn();
             }
@@ -245,7 +269,7 @@ namespace Engine
 
         public bool CanSkipTurn()
         {
-            if (this.players[this._currPlayer].SkippedTurns == 0)
+            if (this.players[this._currPlayerIndex].SkippedTurns == 0)
             {
                 return true;
             }
@@ -254,7 +278,7 @@ namespace Engine
 
         public void SettlePlanet()
         {
-            SpaceEntity currentEntity = this.Entities[GetCurrentPlayer().position];
+            SpaceEntity currentEntity = this.Entities[CurrentPlayer.position];
             if (currentEntity is HabitablePlanet planet)
             {
                 if (planet.Owner != null)
@@ -262,12 +286,12 @@ namespace Engine
                     throw new Exception("Planet already owned");
                 }
                 var hotelCost = _fManager.GetSettleCost();
-                if (GetCurrentPlayer().credits < hotelCost)
+                if (CurrentPlayer.Credits < hotelCost)
                 {
                     throw new Exception("Not enough credits");
                 }
-                planet.Owner = GetCurrentPlayer();
-                GetCurrentPlayer().credits -= hotelCost;
+                planet.Owner = CurrentPlayer;
+                CurrentPlayer.Credits -= hotelCost;
                 planet.UpgradeHotel();
             }
             else
@@ -278,7 +302,7 @@ namespace Engine
 
         public bool CanPlayerSettle()
         {
-            SpaceEntity currentEntity = this.Entities[GetCurrentPlayer().position];
+            SpaceEntity currentEntity = this.Entities[CurrentPlayer.position];
             if (currentEntity is HabitablePlanet planet)
             {
                 if (planet.Owner != null)
@@ -287,7 +311,7 @@ namespace Engine
                 }
                 var hotelCost = _fManager.GetSettleCost();
 
-                if ( GetCurrentPlayer().credits < hotelCost)
+                if ( CurrentPlayer.Credits < hotelCost)
                 {
                     return false;
                 }
@@ -305,14 +329,9 @@ namespace Engine
             return _fManager.GetSettleCost();
         }
 
-        public Player GetCurrentPlayer()
-        {
-            return this.players[this._currPlayer];
-        }
-
         public int GetCurrentPlayerIndex()
         {
-            return this._currPlayer;
+            return this._currPlayerIndex;
         }
 
         public PlanetarySystem? GetPlanetarySystem(SpaceEntity entity)
@@ -339,12 +358,12 @@ namespace Engine
 
         public List<HabitablePlanet> GetPlayerPlanets()
         {
-            return OwnershipManager.GetPlayerPlanets(Entities, GetCurrentPlayer());
+            return OwnershipManager.GetPlayerPlanets(Entities, CurrentPlayer);
         }
 
         public List<PlanetarySystem> GetPlayerSystems()
         {
-            return OwnershipManager.GetPlayerSystemGalacticShipyards(GetCurrentPlayer(), Entities, PlanetarySystems);
+            return OwnershipManager.GetPlayerSystemGalacticShipyards(CurrentPlayer, Entities, PlanetarySystems);
         }
 
         public Dictionary<string, int> GetPossibleSystemUpgrades(PlanetarySystem system)
@@ -385,7 +404,7 @@ namespace Engine
             {
                 throw new Exception("Habitable Planet should have a system, unable to find it");
             }
-            var isSystemOwned = OwnershipManager.IsOwnedByPlayer(GetCurrentPlayer(), Entities, planetSystem);
+            var isSystemOwned = OwnershipManager.IsOwnedByPlayer(CurrentPlayer, Entities, planetSystem);
 
             List<string> buildings = UpgradeManager.GetPossiblePlanetUpgrades(planet, isSystemOwned);
             foreach (var building in buildings)
@@ -419,17 +438,17 @@ namespace Engine
             if (building == "Hotel")
             {
                 planet.UpgradeHotel();
-                GetCurrentPlayer().credits -= h_costs;
+                CurrentPlayer.Credits -= h_costs;
             }
             else if (building == "Mine")
             {
                 planet.UpgradeMine();
-                GetCurrentPlayer().credits -= m_costs;
+                CurrentPlayer.Credits -= m_costs;
             }
             else if (building == "Farm")
             {
                 planet.UpgradeFarm();
-                GetCurrentPlayer().credits -= f_costs;
+                CurrentPlayer.Credits -= f_costs;
             }
             upgradedPlanetsThisTurn[planet] = true;
         }
@@ -441,46 +460,39 @@ namespace Engine
             if (building == "Shipyard")
             {
                 system.BuildGalacticShipyhard();
-                GetCurrentPlayer().credits -= s_costs;
+                CurrentPlayer.Credits -= s_costs;
             }
             else if (building == "Mine")
             {
                 system.UupgradeMine();
-                GetCurrentPlayer().credits -= m_costs;
+                CurrentPlayer.Credits -= m_costs;
             }
 
             upgradedSystemThisTurn[system] = true;
 
         }
 
-        // CARDS
-        public int GetCurrentPlayerPirateCards()
+        public Card GetPirateCard()
         {
-            var cards = 0;
+            return _pirateCard;
+        }
 
-            foreach(var card in this.players[_currPlayer].cards)
-            {
-                if (card.strategies[0].Type == Engine.strategies.strategyType.Shield)
-                {
-                    cards++;
-                }
-            }
-            return cards;
+        // CARDS
+        public int GetCurrentPlayerShieldCards()
+        {
+            return CurrentPlayer.ShieldCards;
         }
 
         public void ApplyCard(Card card, int startegyOption = 0)
         {
-            // Move i Shield musze obsłużyc tutaj, reszta jest w CardStrategy
-            if (card.strategies[0].Type == Engine.strategies.strategyType.Shield)
+            // Shield
+            if (card.strategies[0].Type == strategies.strategyType.Shield)
             {
-                // W zasadzie to ta karta tylko anuluje atak piratów, więc wystraczy ją usunąc z ręki gracza
-                this.players[_currPlayer].cards.Remove(card);
-
-            }
-            else if (card.strategies[0].Type == Engine.strategies.strategyType.Move)
+                CurrentPlayer.ShieldCards++;
+            } // Move
+            else if (card.strategies[0].Type == strategies.strategyType.Move)
             {
-                // Należy wybrac nową pozycje, podana przez argument stategyOption jako index planety do której idzie gracz
-                MovePlayerToPostion(startegyOption);
+                MovePlayerToPosition(startegyOption);
             }
             else
             {
