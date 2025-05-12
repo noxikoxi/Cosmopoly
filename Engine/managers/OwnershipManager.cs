@@ -1,6 +1,7 @@
 ﻿using Engine.models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace Engine.managers
         public static bool IsOwnedByPlayer(Player player, List<SpaceEntity> entities, PlanetarySystem system)
         {
             bool isOwner = true;
+            //Debug.WriteLine($"System {system.Name} has {system.GetPlanetsIds().Count} planets.");
 
             foreach (int planetId in system.GetPlanetsIds())
             {
@@ -49,6 +51,7 @@ namespace Engine.managers
                     upgradableSystems.Add(system);
                 }
             }
+            Debug.WriteLine(upgradableSystems.Count);
             return upgradableSystems;
         }
 
@@ -65,7 +68,7 @@ namespace Engine.managers
             return null;
         }
 
-        public static List<PlanetarySystem> GetPlayerSystemGalacticShipyards(Player player, List<SpaceEntity> entities, List<PlanetarySystem> systems)
+        public static List<PlanetarySystem> GetPlayerSystemGalacticShipyards(List<SpaceEntity> entities, List<PlanetarySystem> systems, Player player)
         {
             List<PlanetarySystem> output = [];
 

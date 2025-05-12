@@ -114,11 +114,20 @@ namespace Engine.managers
 
         }
 
+        private bool IsInRange(int pos, int[] arr)
+        {
+            if (pos >= arr.Length)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public (int, int, int) GetPlanetUpgradeCosts(HabitablePlanet planet)
         {
-            int hotelCost = costUpgradeHotel[planet.HotelLevel];
-            int mineCost = costUpgradeMine[planet.MineLevel];
-            int farmCost = costUpgradeFarm[planet.FarmLevel];
+            int hotelCost = IsInRange(planet.HotelLevel, costUpgradeHotel) ? costUpgradeHotel[planet.HotelLevel] : 0;
+            int mineCost = IsInRange(planet.MineLevel, costUpgradeMine) ? costUpgradeMine[planet.MineLevel] : 0;
+            int farmCost = IsInRange(planet.FarmLevel, costUpgradeFarm) ? costUpgradeFarm[planet.FarmLevel] : 0;
             return (hotelCost, mineCost, farmCost);
         }
 
@@ -129,7 +138,7 @@ namespace Engine.managers
 
         public (int, int) GetPlanetarySystemUpgradeCosts(PlanetarySystem system)
         {
-            int mineCost = system.MineLevel == costUpgradeAsteroidMine.Length ? 0 : costUpgradeAsteroidMine[system.MineLevel];
+            int mineCost = IsInRange(system.MineLevel,costUpgradeAsteroidMine) ? costUpgradeAsteroidMine[system.MineLevel] : 0;
             int galacticShipyardCost = 0;
             if (!system.IsGalacticShipyardBuilt)
             {

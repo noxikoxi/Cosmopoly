@@ -12,6 +12,7 @@ using System.Globalization;
 using Game.utils;
 using Engine.models;
 using Engine.strategies;
+using System.Diagnostics;
 
 
 namespace Game
@@ -66,7 +67,7 @@ namespace Game
             try
             {
                 string appDir = AppDomain.CurrentDomain.BaseDirectory;
-                string configPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(appDir, "..", "..", "..", "..", "configs"));
+                string configPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(appDir, "configs"));
                 game = new Engine.Game(players, configPath);
             }
             catch (Exception ex)
@@ -99,7 +100,6 @@ namespace Game
                             planet.PlanetName = game.Entities[idx].Name;
                             planet.PlanetOwner = "Niezamieszkana";
                             planet.PlanetColor = systemColor;
-                            //planet.Tag = game.Entities[idx];
                             system.Children.Add(planet);
                             galaxyEntities.Add(planet);
                         }
@@ -143,6 +143,7 @@ namespace Game
 
             this.Loaded += (s, e) => CanvasWriter.DrawArrows(galaxyEntities, ArrowCanvas);
             this.SizeChanged += (s, e) => CanvasWriter.DrawArrows(galaxyEntities, ArrowCanvas);
+
         }
 
         private void SetInfoAndNextPlayer()
@@ -252,7 +253,7 @@ namespace Game
                 };
                 cardViewModel.AddOption(
                     label: "Zapłać", 
-                    action: (o) => HandleHousing(cost),
+                    action: (o) => HandleHousing(cost, planet2.Owner),
                     canExecute: (o) => true
                 );
                 Card.DataContext = cardViewModel;
@@ -380,11 +381,11 @@ namespace Game
             
         }
 
-        private void HandleHousing(long cost)
+        private void HandleHousing(long cost, Player owner)
         {
             PopupBG.Visibility = Visibility.Hidden;
             Card.Visibility = Visibility.Hidden;
-            game.RemoveCredits(game.CurrentPlayer, cost);
+            game.TransferCredits(game.CurrentPlayer, owner, cost);
             if (game.IsPlayerInBankruptcy(game.CurrentPlayer))
             {
                 ShowBancruptyMessage();

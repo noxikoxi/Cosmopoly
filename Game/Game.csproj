@@ -9,8 +9,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="assets\icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.csproj" />
     <ProjectReference Include="..\GameContainers\GameContainers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="configs\Cards.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="configs\Finance.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="configs\Galaxy.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

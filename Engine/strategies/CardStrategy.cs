@@ -82,7 +82,7 @@ namespace Engine.strategies
                 case strategyType.Cancel:
                     break;
                 case strategyType.Destroy:
-                    List<PlanetarySystem> systems = OwnershipManager.GetPlayerSystems(game.PlanetarySystems, game.Entities, game.CurrentPlayer);
+                    List<PlanetarySystem> systems = OwnershipManager.GetPlayerSystemGalacticShipyards(game.Entities, game.PlanetarySystems, game.CurrentPlayer);
                     var rnd = game.GetRandom().Next(0, systems.Count);
                     systems[rnd].DestroyGalacticShipyard();
                     break;

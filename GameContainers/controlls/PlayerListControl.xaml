@@ -38,8 +38,8 @@
                                VerticalAlignment="Center" />
 
                             <Image Grid.Column="1"
-                               Width="30"
-                               Height="30"
+                               Width="40"
+                               Height="50"
                                Margin="10,0,0,0"
                                Source="{Binding Item2, Converter={StaticResource ShipImageConverter}}"
                                VerticalAlignment="Center" />            

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="GameContainers.controlls.Pirates"
+﻿<UserControl x:Name="PiratesControl" x:Class="GameContainers.controlls.Pirates"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -13,15 +13,7 @@
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Planeta Piratów" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{StaticResource TextColor}" />
         <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Ellipse  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="120">
-                <Ellipse.Fill>
-                    <RadialGradientBrush>
-                        <GradientStop Color="#FF21985E" Offset="0.043"/>
-                        <GradientStop Color="#FF502004" Offset="0.98"/>
-                        <GradientStop Color="#FF92651D" Offset="0.491"/>
-                    </RadialGradientBrush>
-                </Ellipse.Fill>
-            </Ellipse>
+            <Image Source="/GameContainers;component/assets/Pirates.png" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="100" Height="80"/>
             <StackPanel ClipToBounds="False"  Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="ShipsContainer" MaxWidth="150" Height="60" Panel.ZIndex="1">
             </StackPanel>
         </Grid>

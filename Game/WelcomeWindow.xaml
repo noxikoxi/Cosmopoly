@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Game"
         mc:Ignorable="d"
-        Title="WelcomeWindow" Height="800" Width="1000">
+        Title="Cosmopoly" Height="800" Width="1000"
+        Icon="/assets/icon.ico">
     <Grid>
         <Grid.Background>
             <RadialGradientBrush>

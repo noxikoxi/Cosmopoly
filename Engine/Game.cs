@@ -98,15 +98,15 @@ namespace Engine
 
 
 
-        public bool TransferCredits(Player from, Player to, long credits)
+        public void TransferCredits(Player from, Player to, long credits)
         {
             if (from.Credits < credits)
-            {
-                return false;
+            {    
+                to.Credits += from.Credits;
+                from.Credits-= credits;
             }
             from.Credits -= credits;
             to.Credits += credits;
-            return true;
         }
 
         public void SetInitialCredits()
@@ -238,9 +238,9 @@ namespace Engine
             {
                 var card = singualairty.GetRandomCard(
                     OwnershipManager.GetPlayerSystemGalacticShipyards(
-                        CurrentPlayer,
                         Entities,
-                        PlanetarySystems
+                        PlanetarySystems,
+                        CurrentPlayer
                         ),
                     _random);
                 return card;
@@ -363,7 +363,7 @@ namespace Engine
 
         public List<PlanetarySystem> GetPlayerSystems()
         {
-            return OwnershipManager.GetPlayerSystemGalacticShipyards(CurrentPlayer, Entities, PlanetarySystems);
+            return OwnershipManager.GetPlayerSystems(PlanetarySystems, Entities, CurrentPlayer);
         }
 
         public Dictionary<string, int> GetPossibleSystemUpgrades(PlanetarySystem system)
@@ -373,7 +373,7 @@ namespace Engine
             {
                 return new Dictionary<string, int>();
             }
-            var (s_costs, m_costs) = _fManager.GetPlanetarySystemUpgradeCosts(system);
+            var (m_costs, s_costs) = _fManager.GetPlanetarySystemUpgradeCosts(system);
             List<string> buildings = UpgradeManager.GetPossibleSystemUpgrades(system);
             Dictionary<string, int> upgrades = new();
             foreach (var building in buildings)
@@ -456,7 +456,7 @@ namespace Engine
         public void UpgradeSystem(PlanetarySystem system, string building)
         {
 
-            var (s_costs, m_costs) = _fManager.GetPlanetarySystemUpgradeCosts(system);
+            var (m_costs, s_costs) = _fManager.GetPlanetarySystemUpgradeCosts(system);
             if (building == "Shipyard")
             {
                 system.BuildGalacticShipyhard();

@@ -8,10 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="assets\Pirates.png" />
     <None Remove="assets\ship0.png" />
     <None Remove="assets\ship1.png" />
     <None Remove="assets\ship2.png" />
     <None Remove="assets\ship3.png" />
+    <None Remove="assets\Singularity.png" />
+    <None Remove="assets\station.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,10 +22,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="assets\Pirates.png" />
     <Resource Include="assets\ship0.png" />
     <Resource Include="assets\ship1.png" />
     <Resource Include="assets\ship2.png" />
     <Resource Include="assets\ship3.png" />
+    <Resource Include="assets\Singularity.png" />
+    <Resource Include="assets\station.png" />
   </ItemGroup>
 
 </Project>
