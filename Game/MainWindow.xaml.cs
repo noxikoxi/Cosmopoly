@@ -13,6 +13,9 @@ using Game.utils;
 using Engine.models;
 using Engine.strategies;
 using System.Diagnostics;
+using System.Numerics;
+using System;
+using System.Windows.Data;
 
 
 namespace Game
@@ -22,6 +25,7 @@ namespace Game
         Engine.Game game;
         List<IPlanetControl> galaxyEntities;
         List<Image> playerShips;
+        List<GameContainers.containers.PlanetarySystem> UISystems;
 
         const int PLANET_WIDTH = 150;
         const int PLANET_HEIGHT = 100;
@@ -43,13 +47,14 @@ namespace Game
         public MainWindow()
         {
             InitializeComponent();
-            galaxyEntities = new List<IPlanetControl>();
-            playerShips = new List<Image>();
+            galaxyEntities = new();
+            playerShips = new();
+            UISystems = new();
             PlayersList.DataContext = ((App)Application.Current).Players;
             // Initialize the game with players from the application context
             var appPlayers = ((App)Application.Current).Players;
             Engine.models.Player[] players = new Engine.models.Player[appPlayers.Count];
-            ShipNameToImageConverter shipName = new ShipNameToImageConverter();
+            ShipNameToImageConverter shipName = new();
             foreach (var player in appPlayers)
             {
                 var imageSource = shipName.Convert(player.Item2, typeof(BitmapImage), null, CultureInfo.InvariantCulture);
@@ -85,21 +90,55 @@ namespace Game
                 if (planetSystem != null)
                 {
                     GameContainers.containers.PlanetarySystem system = new();
-                    var systemColor = planetColors[game.PlanetarySystems.IndexOf(planetSystem)];
+                    var index = game.PlanetarySystems.IndexOf(planetSystem);
+                    var systemPlanetSource = new BitmapImage(new Uri($"pack://application:,,,/GameContainers;component/assets/planet{index}.png"));
                     system.RadiusX = 1;
                     system.RadiusY = 1;
                     system.Width = 180;
                     system.Height = 90;
+                    system.Upgradeable = true;
                     system.SystemName = planetSystem.Name;
+
+                    Image Shipyard = new Image();
+                    Shipyard.Source = new BitmapImage(new Uri($"pack://application:,,,/GameContainers;component/assets/Shipyard.png"));
+                    Shipyard.Width = 30;
+                    Shipyard.Height = 30;
+                    Shipyard.Visibility = Visibility.Hidden;
+                    system.Children.Add(Shipyard);
+
+                    Image Mine = new Image();
+                    Mine.Source = new BitmapImage(new Uri($"pack://application:,,,/GameContainers;component/assets/Mine.png"));
+                    Mine.Width = 30;
+                    Mine.Height = 30;
+
+                    Label label = new();
+                    label.Foreground = Brushes.White;
+                    Binding binding = new Binding("MineLevel")
+                    {
+                        Source = system,
+                        Mode = BindingMode.OneWay
+                    };
+                    label.SetBinding(ContentProperty, binding);
+                    label.HorizontalAlignment = HorizontalAlignment.Center;
+
+
+                    StackPanel panel = new StackPanel();
+                    panel.Orientation = Orientation.Vertical;
+                    panel.Children.Add(Mine);
+                    panel.Children.Add(label);
+                    system.Children.Add(panel);
+
+                    UISystems.Add(system);
+
                     var nextSystem = game.GetPlanetarySystem(game.Entities[idx]);
                     while (nextSystem != null && nextSystem == planetSystem)
                     {
-                        if (game.Entities[idx] is Engine.models.HabitablePlanet)
+                        if (game.Entities[idx] is HabitablePlanet)
                         {
-                            Planet planet = new(PLANET_WIDTH, PLANET_HEIGHT );
+                            Planet planet = new(PLANET_WIDTH, PLANET_HEIGHT+10 );
                             planet.PlanetName = game.Entities[idx].Name;
                             planet.PlanetOwner = "Niezamieszkana";
-                            planet.PlanetColor = systemColor;
+                            planet.PlanetImageSource = systemPlanetSource;
                             system.Children.Add(planet);
                             galaxyEntities.Add(planet);
                         }
@@ -143,6 +182,14 @@ namespace Game
 
             this.Loaded += (s, e) => CanvasWriter.DrawArrows(galaxyEntities, ArrowCanvas);
             this.SizeChanged += (s, e) => CanvasWriter.DrawArrows(galaxyEntities, ArrowCanvas);
+
+            for (int i = 0; i < 10; i++)
+            {
+                if(game.Entities[i] is HabitablePlanet planet)
+                {
+                    planet.Owner = players[0];
+                }
+            }
 
         }
 
@@ -210,6 +257,7 @@ namespace Game
                     // Owner label change
                     Planet pl = (Planet)galaxyEntities[game.CurrentPlayer.position];
                     pl.PlanetOwner = game.CurrentPlayer.Name;
+                    pl.Upgrade("Hotel");
                     SetInfoAndNextPlayer();
                 },
                 canExecute: (o) => canAfford
@@ -320,12 +368,15 @@ namespace Game
                 }
                 else
                 {
-                    game.ApplyCard(card, i);
+                    var idx = game.ApplyCard(card, i);
                     if (strategy.Type == strategyType.TakeCredits && game.IsPlayerInBankruptcy(game.CurrentPlayer))
                     {
                         ShowBancruptyMessage();
                     }
-                    else
+                    else if (strategy.Type == strategyType.Destroy)
+                    {
+                        UISystems[idx].DestroyShipyard();
+                    } else
                     {
                         SetInfoAndNextPlayer();
                     }
@@ -406,6 +457,7 @@ namespace Game
                 if (entity is Planet planet && planet.PlanetOwner == game.CurrentPlayer.Name)
                 {
                     planet.PlanetOwner = "Niezamieszkana";
+                    planet.ResetBuildings();
                 }
 
             }
@@ -438,7 +490,7 @@ namespace Game
             {
                 entityChooser.AddEntity(
                     name: $"System {system.Name}",
-                    color: planetColors[game.PlanetarySystems.IndexOf(system)],
+                    img: new BitmapImage(new Uri($"pack://application:,,,/GameContainers;component/assets/planet{game.PlanetarySystems.IndexOf(system)}.png")),
                     action: (o) =>
                     {
                         PopupBG.Visibility = Visibility.Hidden;
@@ -451,7 +503,7 @@ namespace Game
             {
                 entityChooser.AddEntity(
                     name: $"Planet {planet.Name}",
-                    color: planetColors[game.PlanetarySystems.IndexOf(game.GetPlanetarySystem(planet))],
+                    img: new BitmapImage(new Uri($"pack://application:,,,/GameContainers;component/assets/planet{game.PlanetarySystems.IndexOf(game.GetPlanetarySystem(planet))}.png")),
                     action: (o) =>
                     {
                         EntityChooser.Visibility = Visibility.Hidden;
@@ -478,7 +530,10 @@ namespace Game
                         UpgradeChooser.Visibility = Visibility.Hidden;
 
                         game.UpgradePlanet(planet, pair.Key);
+                        var UIPlanet = galaxyEntities[game.GetEntityIndex(planet)] as Planet;
+                        UIPlanet.Upgrade(pair.Key);
                     },
+                    img: new BitmapImage(new Uri($"pack://application:,,,/GameContainers;component/assets/{pair.Key}.png")),
                     canUpgrade: (o) => game.CurrentPlayer.Credits >= pair.Value
                     );
                 
@@ -504,7 +559,9 @@ namespace Game
                         UpgradeChooser.Visibility = Visibility.Hidden;
 
                         game.UpgradeSystem(system, pair.Key);
+                        UISystems[game.GetPlanetarySystemIndex(system)].Upgrade(pair.Key);
                     },
+                    img: new BitmapImage(new Uri($"pack://application:,,,/GameContainers;component/assets/{pair.Key}.png")),
                     canUpgrade: (o) => game.CurrentPlayer.Credits >= pair.Value
                     );
             }

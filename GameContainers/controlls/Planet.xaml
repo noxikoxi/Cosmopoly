@@ -14,6 +14,29 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" Grid.RowSpan="3" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Image Source="/GameContainers;component/assets/Hotel.png" Height="35"/>
+                <Label Content="{Binding HotelLevel}" Foreground="{StaticResource TextColor}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <Image Source="/GameContainers;component/assets/Farm.png" Height="35"/>
+                <Label Content="{Binding FarmLevel}" Foreground="{StaticResource TextColor}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <Image Source="/GameContainers;component/assets/Mine.png" Height="35"/>
+                <Label Content="{Binding MineLevel}" Foreground="{StaticResource TextColor}"/>
+            </StackPanel>
+        </Grid>
         <Label 
             Content="{Binding PlanetOwner, RelativeSource={RelativeSource AncestorType=UserControl}}"
             Foreground="{StaticResource TextColor}"
@@ -21,16 +44,11 @@
             VerticalAlignment="Bottom"
             FontSize="10"
             Panel.ZIndex="1"
-            Grid.Row="0"/>
-        <Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" ClipToBounds="False">
-            <Ellipse 
-                HorizontalAlignment="Stretch" 
-                VerticalAlignment="Stretch"
-                Width="100"
-                Fill="{Binding PlanetColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                Panel.ZIndex="0"
-                
-            />
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="0,0,0,-10"/>
+        <Grid Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" ClipToBounds="False">
+            <Image Source="{Binding PlanetImageSource, RelativeSource={RelativeSource AncestorType=UserControl}}" Width="Auto" Height="Auto"/>
             <StackPanel ClipToBounds="False"  Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="ShipsContainer" MaxWidth="150" Height="60" Panel.ZIndex="1">
             </StackPanel>
 
@@ -41,8 +59,10 @@
             FontSize="10"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
-            Panel.ZIndex="1"
+            Panel.ZIndex="2"
             Grid.Row="2"
+            Grid.Column="1"
+            Margin="0,-10,0,0"
         />
     </Grid>
 </UserControl>

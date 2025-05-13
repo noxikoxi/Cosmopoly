@@ -8,13 +8,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="assets\Farm.png" />
+    <None Remove="assets\Hotel.png" />
+    <None Remove="assets\Mine.png" />
     <None Remove="assets\Pirates.png" />
+    <None Remove="assets\planet0.png" />
+    <None Remove="assets\planet1.png" />
+    <None Remove="assets\planet2.png" />
+    <None Remove="assets\planet3.png" />
+    <None Remove="assets\planet4.png" />
     <None Remove="assets\ship0.png" />
     <None Remove="assets\ship1.png" />
     <None Remove="assets\ship2.png" />
     <None Remove="assets\ship3.png" />
+    <None Remove="assets\shipyard.png" />
     <None Remove="assets\Singularity.png" />
     <None Remove="assets\station.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\Farm.png" />
+    <Resource Include="assets\Hotel.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,11 +36,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="assets\Mine.png" />
     <Resource Include="assets\Pirates.png" />
+    <Resource Include="assets\planet0.png" />
+    <Resource Include="assets\planet1.png" />
+    <Resource Include="assets\planet2.png" />
+    <Resource Include="assets\planet3.png" />
+    <Resource Include="assets\planet4.png" />
     <Resource Include="assets\ship0.png" />
     <Resource Include="assets\ship1.png" />
     <Resource Include="assets\ship2.png" />
     <Resource Include="assets\ship3.png" />
+    <Resource Include="assets\Shipyard.png" />
     <Resource Include="assets\Singularity.png" />
     <Resource Include="assets\station.png" />
   </ItemGroup>

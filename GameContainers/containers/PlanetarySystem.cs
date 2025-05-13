@@ -1,14 +1,17 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Size = System.Windows.Size;
 
 namespace GameContainers.containers
 {
-    public class PlanetarySystem : Panel
+    public class PlanetarySystem : Panel, INotifyPropertyChanged
     {
         public static readonly DependencyProperty SystemNameProperty =
            DependencyProperty.Register(
@@ -24,6 +27,10 @@ namespace GameContainers.containers
                 ps.systemLabel.Content = e.NewValue?.ToString();
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         public string SystemName
         {
@@ -70,7 +77,33 @@ namespace GameContainers.containers
             set => SetValue(PercentageSizeProperty, value);
         }
 
+        public static readonly DependencyProperty UpgradeableProperty =
+        DependencyProperty.Register(
+            nameof(Upgradeable),
+            typeof(bool),
+            typeof(PlanetarySystem),
+            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsArrange));
+
+        public bool Upgradeable
+        {
+            get => (bool)GetValue(UpgradeableProperty);
+            set => SetValue(UpgradeableProperty, value);
+        }
+
         private readonly Label systemLabel;
+        private int _mineLevel;
+        public int MineLevel
+        {
+            get => _mineLevel;
+            set
+            {
+                if (_mineLevel != value)
+                {
+                    _mineLevel = value;
+                    OnPropertyChanged(nameof(MineLevel));
+                }
+            }
+        }
 
         public PlanetarySystem() : base()
         {
@@ -84,8 +117,36 @@ namespace GameContainers.containers
                 VerticalAlignment = VerticalAlignment.Center,
                 IsHitTestVisible = false,
             };
-
             Children.Add(systemLabel);
+            MineLevel = 0;
+        }
+
+        public void ShowShipyard()
+        {
+            if(Upgradeable)
+            {
+                InternalChildren[1].Visibility = Visibility.Visible;
+            }
+        }
+
+        public void DestroyShipyard()
+        {
+            if (Upgradeable)
+            {
+                InternalChildren[1].Visibility = Visibility.Hidden;
+            }
+        }
+
+        public void Upgrade(string upgrade)
+        {
+            if (upgrade == "Mine")
+            {
+                MineLevel++;
+            }
+            else if (upgrade == "Shipyard")
+            {
+                InternalChildren[1].Visibility = Visibility.Visible;
+            }
         }
 
         protected override Size MeasureOverride(Size availableSize)
@@ -110,10 +171,14 @@ namespace GameContainers.containers
             double radiusY = PercentageSize * finalSize.Height * RadiusY;
 
             InternalChildren[0].Arrange(new Rect(new System.Windows.Point(centerX - InternalChildren[0].DesiredSize.Width/2, centerY - InternalChildren[0].DesiredSize.Height /2), InternalChildren[0].DesiredSize));
-
-            for (int i = 1; i < n_children; i++)
+            if (Upgradeable)
             {
-                double baseAngle = 360.0 / (n_children-1) * i;
+                InternalChildren[1].Arrange(new Rect(new System.Windows.Point(centerX - InternalChildren[0].DesiredSize.Width / 2 - InternalChildren[1].DesiredSize.Width, centerY - InternalChildren[1].DesiredSize.Height / 2) , InternalChildren[1].DesiredSize));
+                InternalChildren[2].Arrange(new Rect(new System.Windows.Point(centerX + InternalChildren[0].DesiredSize.Width / 2 + 3, centerY - InternalChildren[2].DesiredSize.Height / 2), InternalChildren[2].DesiredSize));
+            }
+            for (int i = Upgradeable ? 3 : 1; i < n_children; i++)
+            {
+                double baseAngle = 360.0 / (n_children - (Upgradeable ? 3 : 1)) * i;
                 double angleInRadians = baseAngle * Math.PI / 180;
 
                 double x = centerX + radiusX * Math.Cos(angleInRadians) - InternalChildren[i].DesiredSize.Width / 2;

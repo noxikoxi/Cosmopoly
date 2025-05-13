@@ -54,11 +54,29 @@
                             <Button 
                                 Width="80"
                                 Height="80"
-                                Background="{Binding Color}" 
+                                Background="Transparent"
+                                BorderThickness="0"
                                 Command="{Binding OpenDetailsCommand}"  
-                                CommandParameter="{Binding}"  
-                                Style="{StaticResource RoundedButton}" 
-                                />
+                                CommandParameter="{Binding}"
+                                Cursor="Hand"
+                                FocusVisualStyle="{x:Null}"
+                                >
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="border" Background="Transparent" BorderBrush="Transparent" BorderThickness="2">
+                                            <Image Source="{Binding Image}" Stretch="Uniform"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="border" Property="BorderBrush" Value="White"/>
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#22000000"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

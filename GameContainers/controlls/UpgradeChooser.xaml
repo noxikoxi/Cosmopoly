@@ -44,18 +44,43 @@
                             <Button 
                                 Width="80" 
                                 Height="80" 
-                                Background="Moccasin"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                FocusVisualStyle="{x:Null}"
                                 Command="{Binding UpgradeBuilding}"  
-                                CommandParameter="{Binding}" 
-                                Style="{StaticResource RoundedButton}"
+                                CommandParameter="{Binding}"
+                                Cursor="Hand"
                             >
-                                <TextBlock 
-                                    Text="{Binding Name}" 
-                                    TextWrapping="Wrap"
-                                    TextAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Center"
-                                />          
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="border" Background="Transparent" BorderBrush="Transparent" BorderThickness="2">
+                                            <Grid>
+                                                <Image Source="{Binding Image}" Stretch="Uniform" Opacity="0.7"/>
+                                                <TextBlock 
+                                                    Text="{Binding Name}" 
+                                                    TextWrapping="Wrap"
+                                                    TextAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Center"
+                                                    Panel.ZIndex="2"
+                                                    Foreground="{StaticResource TextColor}"
+                                                    >
+                                                    <TextBlock.Effect>
+                                                        <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="0" Opacity="0.6"/>
+                                                    </TextBlock.Effect>
+                                                </TextBlock>
+                                            </Grid>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="border" Property="BorderBrush" Value="White"/>
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#22000000"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
                             </Button>
                             <Label Content="{Binding Effect}" HorizontalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource TextColor}"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

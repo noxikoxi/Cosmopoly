@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GameContainers.controlls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" MinHeight="400" MinWidth="400" Width="800" MaxWidth="800">
+             d:DesignHeight="350" d:DesignWidth="800" MinHeight="350" MinWidth="400" Width="800" MaxWidth="800">
     <Border x:Name="ParentBorder"
         CornerRadius="10"
         Background="{StaticResource ContainerBackground}"

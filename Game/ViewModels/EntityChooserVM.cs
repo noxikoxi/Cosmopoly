@@ -15,7 +15,7 @@ namespace Game.ViewModels
     public class EntityDisplayData
     {
         public string Name { get; set; }
-        public Brush Color { get; set; }
+        public ImageSource Image { get; set; }
         public ICommand OpenDetailsCommand { get; set; } // Komenda otwierająca panel ulepszeń
     }
 
@@ -28,12 +28,12 @@ namespace Game.ViewModels
             Entities = new();
         }
             
-        public void AddEntity(string name, Brush color, Action<object> action)
+        public void AddEntity(string name, ImageSource img, Action<object> action)
         {
             Entities.Add(new EntityDisplayData
             {
                 Name = name,
-                Color = color,
+                Image = img,
                 OpenDetailsCommand = new RelayCommand(action)
             });
         }

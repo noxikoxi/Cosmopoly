@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using Engine.managers;
 using Engine.models;
+using Engine.strategies;
 using Engine.utils;
 
 namespace Engine
@@ -94,6 +95,16 @@ namespace Engine
         public void AddCredits(Player player, long credits)
         {
             player.Credits += credits;
+        }
+
+        public int GetEntityIndex(SpaceEntity entity)
+        {
+            return Entities.IndexOf(entity);
+        }
+
+        public int GetPlanetarySystemIndex(PlanetarySystem system)
+        {
+            return PlanetarySystems.IndexOf(system);
         }
 
 
@@ -483,7 +494,7 @@ namespace Engine
             return CurrentPlayer.ShieldCards;
         }
 
-        public void ApplyCard(Card card, int startegyOption = 0)
+        public int ApplyCard(Card card, int startegyOption = 0)
         {
             // Shield
             if (card.strategies[0].Type == strategies.strategyType.Shield)
@@ -494,7 +505,13 @@ namespace Engine
             {
                 MovePlayerToPosition(startegyOption);
             }
-            else
+            else if (card.strategies[0].Type == strategies.strategyType.Destroy)
+            {
+                    List<PlanetarySystem> systems = OwnershipManager.GetPlayerSystemGalacticShipyards(Entities, PlanetarySystems, CurrentPlayer);
+                    var rnd = GetRandom().Next(0, systems.Count);
+                    systems[rnd].DestroyGalacticShipyard();
+                    return GetPlanetarySystemIndex(systems[rnd]);
+            } else
             {
 
                 if (card.ApplyTogether)
@@ -509,6 +526,8 @@ namespace Engine
                     card.strategies[startegyOption].Apply(this);
                 }
             }
+
+            return 0;
         }
     }
 }

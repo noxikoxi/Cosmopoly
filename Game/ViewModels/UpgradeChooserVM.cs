@@ -18,6 +18,8 @@ namespace Game.ViewModels
         public int Price { get; set; }
         public string Effect { get; set; }
 
+        public ImageSource Image { get; set; }
+
         public ICommand UpgradeBuilding { get; set; } // Komenda otwierająca panel ulepszeń
 
     }
@@ -31,7 +33,7 @@ namespace Game.ViewModels
             Upgrades = new();
         }
 
-        public void AddUpgrade(int level, string name, int price, string effect, Action<object> action, Predicate<object> canUpgrade)
+        public void AddUpgrade(int level, string name, int price, string effect, ImageSource img, Action<object> action, Predicate<object> canUpgrade)
         {
             Upgrades.Add(new Upgrade
             {
@@ -39,6 +41,7 @@ namespace Game.ViewModels
                 Name = name,
                 Price = price,
                 Effect = effect,
+                Image = img,
                 UpgradeBuilding = new RelayCommand(action, canUpgrade)
             });
         }

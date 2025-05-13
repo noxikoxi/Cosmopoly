@@ -56,11 +56,13 @@ namespace GameContainers.controlls
             {
                 HideThrough();
                 seeThrough = false;
+                Hide.Content = "Ukryj";
             }
             else
             {
                 SeeThrough();
                 seeThrough = true;
+                Hide.Content = "Pokaż";
             }
         }
     }
