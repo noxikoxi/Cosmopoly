@@ -45,7 +45,7 @@ namespace GameContainers.controlls
             this.Width = width;
             this.Height = height;
         }
-        public StackPanel GetShipsContainer()
+        public Panel GetShipsContainer()
         {
             return ShipsContainer;
         }

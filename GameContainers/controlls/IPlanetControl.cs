@@ -9,6 +9,6 @@ namespace GameContainers.controlls
 {
     public interface IPlanetControl
     {
-        public StackPanel GetShipsContainer();
+        public Panel GetShipsContainer();
     }
 }

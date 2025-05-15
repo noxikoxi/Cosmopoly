@@ -28,7 +28,7 @@ namespace Game
         List<GameContainers.containers.PlanetarySystem> UISystems;
 
         const int PLANET_WIDTH = 150;
-        const int PLANET_HEIGHT = 100;
+        const int PLANET_HEIGHT = 110;
 
         public MainWindow()
         {
@@ -121,7 +121,7 @@ namespace Game
                     {
                         if (game.Entities[idx] is HabitablePlanet)
                         {
-                            Planet planet = new(PLANET_WIDTH, PLANET_HEIGHT+10 );
+                            Planet planet = new(PLANET_WIDTH, PLANET_HEIGHT);
                             planet.PlanetName = game.Entities[idx].Name;
                             planet.PlanetOwner = "Niezamieszkana";
                             planet.PlanetImageSource = systemPlanetSource;

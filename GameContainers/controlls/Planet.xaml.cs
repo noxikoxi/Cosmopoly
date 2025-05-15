@@ -117,7 +117,7 @@ namespace GameContainers.controlls
             DataContext = this;
         }
 
-        public StackPanel GetShipsContainer()
+        public Panel GetShipsContainer()
         {
             return ShipsContainer;
         }

@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <None Remove="assets\icon.ico" />
+    <None Remove="background.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +20,7 @@
 
   <ItemGroup>
     <Resource Include="assets\icon.ico" />
+    <Resource Include="background.png" />
   </ItemGroup>
 
   <ItemGroup>

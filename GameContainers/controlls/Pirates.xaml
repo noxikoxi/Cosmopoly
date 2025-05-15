@@ -13,9 +13,8 @@
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Planeta Piratów" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{StaticResource TextColor}" />
         <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Image Source="/GameContainers;component/assets/Pirates.png" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="100" Height="80"/>
-            <StackPanel ClipToBounds="False"  Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="ShipsContainer" MaxWidth="150" Height="60" Panel.ZIndex="1">
-            </StackPanel>
+            <Image Source="/GameContainers;component/assets/Pirates.png" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto"/>
+            <UniformGrid Rows="2" Columns="2" ClipToBounds="False" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="ShipsContainer" MaxWidth="150" Height="Auto" Panel.ZIndex="3" Margin="0,0,0,-10"/>
         </Grid>
     </Grid>
 </UserControl>
