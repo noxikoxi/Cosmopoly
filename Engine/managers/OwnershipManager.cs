@@ -14,8 +14,6 @@ namespace Engine.managers
         public static bool IsOwnedByPlayer(Player player, List<SpaceEntity> entities, PlanetarySystem system)
         {
             bool isOwner = true;
-            //Debug.WriteLine($"System {system.Name} has {system.GetPlanetsIds().Count} planets.");
-
             foreach (int planetId in system.GetPlanetsIds())
             {
                 if (entities[planetId].IsHabitable && ((HabitablePlanet)entities[planetId]).Owner != player)
@@ -51,7 +49,6 @@ namespace Engine.managers
                     upgradableSystems.Add(system);
                 }
             }
-            Debug.WriteLine(upgradableSystems.Count);
             return upgradableSystems;
         }
 

@@ -280,7 +280,7 @@ namespace Engine
 
         public bool CanSkipTurn()
         {
-            if (this.players[this._currPlayerIndex].SkippedTurns == 0)
+            if (this.CurrentPlayer.SkippedTurns == 0)
             {
                 return true;
             }

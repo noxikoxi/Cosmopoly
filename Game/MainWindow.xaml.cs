@@ -30,20 +30,6 @@ namespace Game
         const int PLANET_WIDTH = 150;
         const int PLANET_HEIGHT = 100;
 
-        SolidColorBrush[] planetColors = new SolidColorBrush[]
-            {
-                new SolidColorBrush(Colors.Red),
-                new SolidColorBrush(Colors.Green),
-                new SolidColorBrush(Colors.Blue),
-                new SolidColorBrush(Colors.PaleGreen),
-                new SolidColorBrush(Colors.DarkGray),
-                new SolidColorBrush(Colors.DarkGoldenrod),
-                new SolidColorBrush(Colors.Cyan),
-                new SolidColorBrush(Colors.Magenta),
-                new SolidColorBrush(Colors.LightGray),
-                new SolidColorBrush(Colors.DarkKhaki)
-            };
-
         public MainWindow()
         {
             InitializeComponent();
@@ -182,15 +168,6 @@ namespace Game
 
             this.Loaded += (s, e) => CanvasWriter.DrawArrows(galaxyEntities, ArrowCanvas);
             this.SizeChanged += (s, e) => CanvasWriter.DrawArrows(galaxyEntities, ArrowCanvas);
-
-            for (int i = 0; i < 10; i++)
-            {
-                if(game.Entities[i] is HabitablePlanet planet)
-                {
-                    planet.Owner = players[0];
-                }
-            }
-
         }
 
         private void SetInfoAndNextPlayer()
@@ -447,7 +424,7 @@ namespace Game
             }
         }
 
-        private void HandleAccepteBacruptyMessage()
+        private void HandleAccepteBancruptyMessage()
         {
             PopupBG.Visibility = Visibility.Hidden;
             Card.Visibility = Visibility.Hidden;
@@ -476,7 +453,7 @@ namespace Game
             cardViewModel.AddOption(
                 label: "Akceptuj",
                 canExecute: (o) => true,
-                action: (o) => HandleAccepteBacruptyMessage()
+                action: (o) => HandleAccepteBancruptyMessage()
                 );
             Card.DataContext = cardViewModel;
         }
@@ -573,6 +550,7 @@ namespace Game
             if (game.CanSkipTurn())
             {
                 game.SkipPlayerTurn();
+                PlayerInfo.DataContext = game.CurrentPlayer;
             }
             else
             {

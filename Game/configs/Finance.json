@@ -10,6 +10,6 @@
         "costUpgradeMine": [ 300, 600, 900 ],
         "costUpgradeFarm": [ 200, 400, 600, 800, 1000, 1200 ],
         "costUpgradeAsteroidMine": [ 400, 800, 1200 ],
-        "costBuildShipyard": 5000
+        "costBuildShipyard": 4000
     }
 }
