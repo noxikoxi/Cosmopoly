@@ -1,0 +1,39 @@
+{
+    "entities": [
+        {
+            "name": "Hyperion Gate",
+            "type": "Station",
+            "system": null
+        },
+        {
+            "name": "Aureon",
+            "type": "Planet",
+            "system": "Solvantis"
+        },
+        {
+            "name": "Zenthor",
+            "type": "Planet",
+            "system": "Theta"
+        },
+        {
+            "name": "Nebula Nexus",
+            "type": "Station",
+            "system": null
+        },
+        {
+            "name": null,
+            "type": "Singularity",
+            "system": null
+        },
+        {
+            "name": null,
+            "type": "Pirates",
+            "system": null
+        },
+        {
+            "name": "Zagw",
+            "type": "Planet",
+            "system": "Third"
+        }
+    ]
+}

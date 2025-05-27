@@ -52,7 +52,7 @@ namespace Engine.utils
 
 
 
-    internal static class ConfigLoader
+    public static class ConfigLoader
     {
         const byte PIRATES_BLOCKED_TURNS = 2;
 

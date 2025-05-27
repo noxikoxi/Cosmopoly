@@ -1,0 +1,30 @@
+{
+    "entities": [
+        {
+            "name": "Hyperion Gate",
+        },
+        {
+            "name": "Aureon",
+        },
+        {
+            "system": "Theta"
+        },
+        {
+            "name": "Nebula Nexus",
+            "system": null
+        },
+        {
+            "name": null
+        },
+        {
+            "name": null,
+            "type": "Pirates",
+            "system": null
+        },
+        {
+            "name": "Zagw",
+            "type": "Planet",
+            "system": "Third"
+        }
+    ]
+}

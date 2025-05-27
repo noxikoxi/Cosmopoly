@@ -1,0 +1,16 @@
+{
+    "cards": [
+        {
+            "title": "Atak piratów",
+            "description": "Zostałeś zaatakowany przez piratów.\nJeżeli nie zapłacisz 800 kredytów okupu stracisz 2 kolejki.",
+        },
+        {
+            "title": "Obrona przed piratami",
+            "description": "Strażnicy galaktyki zgodzili sie obronić cię przed jednym atakiem piratów. Wezwij ich kiedy tylko chcesz.",
+        },
+        {
+            "title": "Bilet galaktyczny",
+            "description": "Możesz przenieść się do dowolnej stacji kolei galaktycznych.\n",
+        }
+    ]
+}

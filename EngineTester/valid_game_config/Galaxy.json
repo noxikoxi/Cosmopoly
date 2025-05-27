@@ -1,0 +1,145 @@
+{
+    "entities": [
+        {
+            "name": "Hyperion Gate",
+            "type": "Station",
+            "system": null
+        },
+        {
+            "name": "Aureon",
+            "type": "Planet",
+            "system": "Solvantis"
+        },
+        {
+            "name": "Zenthor",
+            "type": "Planet",
+            "system": "Solvantis"
+        },
+        {
+            "name": "Velkaris",
+            "type": "Planet",
+            "system": "Solvantis"
+        },
+        {
+            "name": "Drakoria",
+            "type": "Planet",
+            "system": "Solvantis"
+        },
+        {
+            "name": "Nebula Nexus",
+            "type": "Station",
+            "system": null
+        },
+        {
+            "name": null,
+            "type": "Singularity",
+            "system": null
+        },
+        {
+            "name": "Erebus-9",
+            "type": "Planet",
+            "system": "Nyxaris"
+        }, 
+        {
+            "name": "Nox'Vera",
+            "type": "Planet",
+            "system": "Nyxaris"
+        },
+        {
+            "name": "Umbra Prime",
+            "type": "Planet",
+            "system": "Nyxaris"
+        },
+        {
+            "name": null,
+            "type": "Pirates",
+            "system": null
+        },
+        {
+            "name": "Pyronis",
+            "type": "Planet",
+            "system": "Ignis Prime"
+        },
+        {
+            "name": "Scorvex",
+            "type": "Planet",
+            "system": "Ignis Prime"
+        },
+        {
+            "name": "Voltrion",
+            "type": "Planet",
+            "system": "Ignis Prime"
+        },
+        {
+            "name": "Ashara",
+            "type": "Planet",
+            "system": "Ignis Prime"
+        },
+        {
+            "name": "Orion Prime",
+            "type": "Station",
+            "system": null
+        },
+        {
+            "name": null,
+            "type": "Singularity",
+            "system": null
+        },
+        {
+            "name": "Aelion",
+            "type": "Planet",
+            "system": "Zephyros"
+        },
+        
+        {
+            "name": "Borealis-7",
+            "type": "Planet",
+            "system": "Zephyros"
+        },
+        {
+            "name": "Cirrha",
+            "type": "Planet",
+            "system": "Zephyros"
+        },
+        {
+            "name": "Veyra",
+            "type": "Planet",
+            "system": "Zephyros"
+        },
+        {
+            "name": null,
+            "type": "Pirates",
+            "system": null
+        },
+        {
+            "name": "ExoTransit-9",
+            "type": "Station",
+            "system": null
+        },
+        {
+            "name": "Tyrranis Major",
+            "type": "Planet",
+            "system": "Tyrran Expanse"
+        },
+        {
+            "name": "Xerathis",
+            "type": "Planet",
+            "system": "Tyrran Expanse"
+        },
+        {
+            "name": "Nyvarra",
+            "type": "Planet",
+            "system": "Tyrran Expanse"
+        },
+        {
+            "name": "Morthar-3",
+            "type": "Planet",
+            "system": "Tyrran Expanse"
+        },
+        {
+            "name": "Draxia",
+            "type": "Planet",
+            "system": "Tyrran Expanse"
+        }
+    ]
+}

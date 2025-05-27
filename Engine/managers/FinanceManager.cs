@@ -8,51 +8,51 @@ using Engine.models;
 
 namespace Engine.managers
 {
-    internal class FinanceManager
+    public class FinanceManager
     {
         [JsonInclude]
         [JsonPropertyName("passiveBase")]
-        private int passiveBase;
+        internal int passiveBase;
 
         [JsonInclude]
         [JsonPropertyName("passiveGalacticShipyard")]
-        private int passiveByGalacticShipyard;
+        internal int passiveByGalacticShipyard;
 
         [JsonInclude]
         [JsonPropertyName("passiveMine")]
-        private int[] passiveByMineLevel;
+        internal int[] passiveByMineLevel;
 
         [JsonInclude]
         [JsonPropertyName("passiveFarm")]
-        private int[] passiveByFarmLevel;
+        internal int[] passiveByFarmLevel;
 
         [JsonInclude]
         [JsonPropertyName("passiveAsteroidMine")]
-        private int[] passiveByAsteroidMineLevel;
+        internal int[] passiveByAsteroidMineLevel;
 
         [JsonInclude]
         [JsonPropertyName("costHotel")]
-        private int[] costbyHotelLevel;
+        internal int[] costbyHotelLevel;
 
         [JsonInclude]
         [JsonPropertyName("costUpgradeHotel")]
-        private int[] costUpgradeHotel;
+        internal int[] costUpgradeHotel;
 
         [JsonInclude]
         [JsonPropertyName("costUpgradeMine")]
-        private int[] costUpgradeMine;
+        internal int[] costUpgradeMine;
 
         [JsonInclude]
         [JsonPropertyName("costUpgradeFarm")]
-        private int[] costUpgradeFarm;
+        internal int[] costUpgradeFarm;
 
         [JsonInclude]
         [JsonPropertyName("costUpgradeAsteroidMine")]
-        private int[] costUpgradeAsteroidMine;
+        internal int[] costUpgradeAsteroidMine;
 
         [JsonInclude]
         [JsonPropertyName("costBuildShipyard")]
-        private int costBuildShipyard;
+        internal int costBuildShipyard;
 
         public FinanceManager()
         {

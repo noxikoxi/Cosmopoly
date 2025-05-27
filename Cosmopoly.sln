@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameContainers", "GameConta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "Game\Game.csproj", "{AEF6A4EF-DC54-400B-ABA7-3F89A76693C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineTester", "EngineTester\EngineTester.csproj", "{F4B49417-ABC4-4DAF-A09E-428E793D0315}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,8 +57,23 @@ Global
 		{AEF6A4EF-DC54-400B-ABA7-3F89A76693C9}.Release|x64.Build.0 = Release|Any CPU
 		{AEF6A4EF-DC54-400B-ABA7-3F89A76693C9}.Release|x86.ActiveCfg = Release|Any CPU
 		{AEF6A4EF-DC54-400B-ABA7-3F89A76693C9}.Release|x86.Build.0 = Release|Any CPU
+		{F4B49417-ABC4-4DAF-A09E-428E793D0315}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4B49417-ABC4-4DAF-A09E-428E793D0315}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4B49417-ABC4-4DAF-A09E-428E793D0315}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F4B49417-ABC4-4DAF-A09E-428E793D0315}.Debug|x64.Build.0 = Debug|Any CPU
+		{F4B49417-ABC4-4DAF-A09E-428E793D0315}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F4B49417-ABC4-4DAF-A09E-428E793D0315}.Debug|x86.Build.0 = Debug|Any CPU
+		{F4B49417-ABC4-4DAF-A09E-428E793D0315}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4B49417-ABC4-4DAF-A09E-428E793D0315}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4B49417-ABC4-4DAF-A09E-428E793D0315}.Release|x64.ActiveCfg = Release|Any CPU
+		{F4B49417-ABC4-4DAF-A09E-428E793D0315}.Release|x64.Build.0 = Release|Any CPU
+		{F4B49417-ABC4-4DAF-A09E-428E793D0315}.Release|x86.ActiveCfg = Release|Any CPU
+		{F4B49417-ABC4-4DAF-A09E-428E793D0315}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A1DC55FD-72B8-4B96-B0A4-F4321DE3975E}
 	EndGlobalSection
 EndGlobal
